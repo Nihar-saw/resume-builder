@@ -24,3 +24,8 @@ export const generateInterviewQuestions = async (resume, jobTitle) => {
   const response = await API.post("/ai/interview", { resume, jobTitle });
   return response.data;
 };
+
+export const generateResumeFromPrompt = async (prompt) => {
+  const response = await API.post("/ai/generate", { prompt });
+  return response.data;
+};

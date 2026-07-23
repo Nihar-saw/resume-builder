@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useResume } from "../context/ResumeContext";
 import { downloadPDF, downloadDOCX } from "../api/pdf.api";
+import { generateResumeFromPrompt } from "../api/ai.api";
 import {
   IoChevronBackOutline,
   IoEyeOutline,
@@ -24,6 +25,54 @@ const ResumeBuilder = () => {
   
   const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState("personal");
+  const [aiPrompt, setAiPrompt] = useState("");
+  const [generatingWithAI, setGeneratingWithAI] = useState(false);
+
+  const handleAIGenerate = async (e) => {
+    e.preventDefault();
+    if (!aiPrompt) {
+      toast.error("Please enter a prompt first");
+      return;
+    }
+    setGeneratingWithAI(true);
+    toast.loading("AI is generating resume details...");
+    try {
+      const data = await generateResumeFromPrompt(aiPrompt);
+      toast.dismiss();
+      if (data.success && data.resume) {
+        const merged = {
+          ...currentResume,
+          personalInfo: {
+            ...currentResume.personalInfo,
+            fullName: data.resume.personalInfo?.fullName || currentResume.personalInfo?.fullName || "",
+            summary: data.resume.personalInfo?.summary || currentResume.personalInfo?.summary || "",
+            email: data.resume.personalInfo?.email || currentResume.personalInfo?.email || "",
+            phone: data.resume.personalInfo?.phone || currentResume.personalInfo?.phone || "",
+            location: data.resume.personalInfo?.location || currentResume.personalInfo?.location || "",
+            website: data.resume.personalInfo?.website || currentResume.personalInfo?.website || "",
+            linkedin: data.resume.personalInfo?.linkedin || currentResume.personalInfo?.linkedin || "",
+            github: data.resume.personalInfo?.github || currentResume.personalInfo?.github || "",
+            portfolio: data.resume.personalInfo?.portfolio || currentResume.personalInfo?.portfolio || "",
+          },
+          skills: data.resume.skills || currentResume.skills || [],
+          education: data.resume.education || currentResume.education || [],
+          experience: data.resume.experience || currentResume.experience || [],
+          projects: data.resume.projects || currentResume.projects || [],
+        };
+        await updateCurrentResume(id, merged);
+        toast.success("Resume populated with AI suggestions!");
+        setAiPrompt("");
+      } else {
+        toast.error("Failed to generate details. Please check Ollama.");
+      }
+    } catch (err) {
+      toast.dismiss();
+      console.error(err);
+      toast.error(err.message || "Failed to generate details. Make sure Ollama is running.");
+    } finally {
+      setGeneratingWithAI(false);
+    }
+  };
 
   useEffect(() => {
     const loadResume = async () => {
@@ -58,8 +107,8 @@ const ResumeBuilder = () => {
   const addEducation = () => {
     const eduList = [...(currentResume.education || [])];
     eduList.push({
-      school: "",
-      degree: "",
+      school: "School Name",
+      degree: "Degree (e.g. BS)",
       fieldOfStudy: "",
       startDate: "",
       endDate: "",
@@ -83,8 +132,8 @@ const ResumeBuilder = () => {
   const addExperience = () => {
     const expList = [...(currentResume.experience || [])];
     expList.push({
-      company: "",
-      position: "",
+      company: "Company Name",
+      position: "Job Title",
       location: "",
       startDate: "",
       endDate: "",
@@ -138,7 +187,7 @@ const ResumeBuilder = () => {
   const addProject = () => {
     const projList = [...(currentResume.projects || [])];
     projList.push({
-      title: "",
+      title: "Project Title",
       description: "",
       technologies: [],
       github: "",
@@ -268,7 +317,38 @@ const ResumeBuilder = () => {
         </aside>
 
         {/* Center Panel (Fields Editor) */}
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 max-w-xl mx-auto w-full">
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 max-w-xl mx-auto w-full space-y-6">
+          
+          {/* AI Autofill Prompt Card */}
+          <Card className="text-left p-5 border border-indigo-100 bg-indigo-50/20 relative overflow-hidden">
+            <div className="absolute top-0 right-0 h-24 w-24 bg-indigo-500/5 rounded-full blur-xl" />
+            <h4 className="font-bold text-slate-800 text-sm flex items-center gap-1.5 mb-2">
+              <span className="text-base">🤖</span>
+              Autofill Resume with AI
+            </h4>
+            <p className="text-[10px] text-slate-400 font-semibold mb-4 leading-relaxed">
+              Enter a short prompt detailing your role, work history, or technologies. AI will populate summary bullets, key skills, and projects automatically.
+            </p>
+            <form onSubmit={handleAIGenerate} className="flex gap-2">
+              <input
+                type="text"
+                placeholder="e.g. Senior Frontend Developer with 5 years React experience, worked at Stripe."
+                value={aiPrompt}
+                onChange={(e) => setAiPrompt(e.target.value)}
+                className="flex-grow w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800 placeholder:text-slate-450 focus:border-indigo-500 focus:outline-none"
+              />
+              <Button
+                type="submit"
+                variant="primary"
+                size="sm"
+                className="text-xs font-bold shrink-0 shadow-md shadow-indigo-600/10 px-4"
+                loading={generatingWithAI}
+              >
+                Autofill
+              </Button>
+            </form>
+          </Card>
+
           <Card className="text-left space-y-6">
             
             {/* 1. Personal Info Section */}
