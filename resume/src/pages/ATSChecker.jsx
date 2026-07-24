@@ -241,6 +241,37 @@ const ATSChecker = () => {
                   )}
                 </ul>
               </div>
+
+              {/* Keywords Match Lists */}
+              <div className="space-y-4 pt-4 border-t border-slate-100">
+                {/* Matched Keywords */}
+                {report.matchedKeywords && report.matchedKeywords.length > 0 && (
+                  <div className="space-y-2">
+                    <h5 className="text-xs font-bold text-slate-500 uppercase tracking-wider">Matched Keywords</h5>
+                    <div className="flex flex-wrap gap-2">
+                      {report.matchedKeywords.map((kw, idx) => (
+                        <span key={idx} className="bg-emerald-50 text-emerald-700 border border-emerald-150 rounded-xl px-2.5 py-1 text-[10px] font-bold capitalize">
+                          ✓ {kw}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Missing Keywords */}
+                {report.missingKeywords && report.missingKeywords.length > 0 && (
+                  <div className="space-y-2">
+                    <h5 className="text-xs font-bold text-slate-500 uppercase tracking-wider">Missing Keywords (Recommend adding)</h5>
+                    <div className="flex flex-wrap gap-2">
+                      {report.missingKeywords.map((kw, idx) => (
+                        <span key={idx} className="bg-rose-50 text-rose-700 border border-rose-150 rounded-xl px-2.5 py-1 text-[10px] font-bold capitalize">
+                          + {kw}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </Card>
           ) : (
             <Card className="flex flex-col items-center justify-center py-20 text-center border-dashed">
