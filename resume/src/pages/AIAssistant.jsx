@@ -278,9 +278,12 @@ const AIAssistant = () => {
                   <p className="text-xs text-slate-400">Ollama model is synthesizing responses...</p>
                 </div>
               ) : (
-                <pre className="text-sm font-medium text-slate-600 whitespace-pre-wrap font-sans leading-relaxed bg-slate-50/50 p-4 rounded-xl border border-slate-100 max-h-96 overflow-y-auto">
-                  {result}
-                </pre>
+                <textarea
+                  value={result}
+                  onChange={(e) => setResult(e.target.value)}
+                  className="w-full text-sm font-medium text-slate-600 bg-slate-50/50 p-4 rounded-xl border border-slate-100 min-h-64 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all duration-200 resize-y font-sans leading-relaxed"
+                  placeholder="AI output will appear here..."
+                />
               )}
             </Card>
           )}
