@@ -19,6 +19,7 @@ import { toast } from "react-hot-toast";
 const PublicResume = () => {
   const { slug } = useParams();
   const [resume, setResume] = useState(null);
+  const [resumeUser, setResumeUser] = useState(null);
   const [qrCode, setQrCode] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -36,6 +37,7 @@ const PublicResume = () => {
         const data = await getPublicResume(slug);
         if (data.success && data.resume) {
           setResume(data.resume);
+          setResumeUser(data.user);
           setQrCode(data.qrCode);
         } else {
           setError(data.message || "Failed to load public resume");
@@ -149,7 +151,7 @@ const PublicResume = () => {
             <div className="absolute -bottom-4 -right-4 h-16 w-16 bg-indigo-400/10 rounded-full blur-xl" />
             
             <img
-              src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${fullName}`}
+              src={resumeUser?.avatar || `https://api.dicebear.com/7.x/adventurer/svg?seed=${fullName}`}
               alt={fullName}
               className="h-60 w-60 rounded-full object-cover bg-white border border-indigo-100 shadow-lg"
             />
