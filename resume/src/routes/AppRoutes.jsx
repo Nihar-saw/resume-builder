@@ -10,6 +10,7 @@ import PublicRoute from "./PublicRoute";
 // Pages
 import Landing from "../pages/Landing";
 import Login from "../pages/Login";
+import Register from "../pages/Register";
 import Dashboard from "../pages/Dashboard";
 import Resumes from "../pages/Resumes";
 import ResumeBuilder from "../pages/ResumeBuilder";
