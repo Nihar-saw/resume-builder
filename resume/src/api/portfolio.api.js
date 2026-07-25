@@ -1,7 +1,7 @@
 import API from "./axios";
 
-export const createPortfolio = async (resumeId) => {
-  const response = await API.post("/portfolio", { resumeId });
+export const createPortfolio = async (resumeId, theme = "auto") => {
+  const response = await API.post("/portfolio", { resumeId, theme });
   return response.data;
 };
 
