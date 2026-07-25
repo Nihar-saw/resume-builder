@@ -165,8 +165,8 @@ const ATSChecker = () => {
           {loading ? (
             <Card className="flex flex-col items-center justify-center py-20 text-center">
               <Loader size="lg" className="mb-4" />
-              <h4 className="font-bold text-slate-800">Analyzing Resume...</h4>
-              <p className="text-xs text-slate-400 mt-1 max-w-xs">Scanning text structures, mapping skills, and fetching score metrics.</p>
+              <h4 className="font-bold text-slate-800">AI is Analyzing Your Resume...</h4>
+              <p className="text-xs text-slate-400 mt-1 max-w-xs">Ollama AI is scanning your resume against the job description. This may take up to a minute.</p>
             </Card>
           ) : report ? (
             <Card className="space-y-6 text-left relative overflow-hidden">
