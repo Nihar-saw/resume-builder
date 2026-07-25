@@ -8,10 +8,10 @@ const Footer = () => {
           {/* Logo */}
           <div className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-white font-extrabold text-sm shadow-md shadow-indigo-600/30">
-              R
+              A
             </div>
-            <span className="text-lg font-bold tracking-tight text-slate-800">
-              Resume<span className="text-indigo-600">AI</span>
+            <span className="text-lg font-bold tracking-tight text-slate-800 dark:text-white">
+              Astra<span className="text-indigo-600">CV</span>
             </span>
           </div>
 
@@ -25,7 +25,7 @@ const Footer = () => {
 
           {/* Copy */}
           <p className="text-sm text-slate-400">
-            &copy; {new Date().getFullYear()} ResumeAI. All rights reserved.
+            &copy; {new Date().getFullYear()} AstraCV. All rights reserved.
           </p>
         </div>
       </div>
