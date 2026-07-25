@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../context/AuthContext";
+import { updateUserProfile } from "../api/auth.api";
 import Card from "../components/common/Card";
 import Button from "../components/common/Button";
 import Input from "../components/common/Input";
@@ -8,13 +9,15 @@ import { toast } from "react-hot-toast";
 
 const Settings = () => {
   const { user, setUser } = useAuth();
+  const fileInputRef = useRef(null);
   const [activeTab, setActiveTab] = useState("profile");
+  const [avatar, setAvatar] = useState(user?.avatar || "");
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
-    firstName: user?.firstName || "John",
-    lastName: user?.lastName || "Doe",
-    email: user?.email || "john.doe@example.com",
+    firstName: user?.firstName || "",
+    lastName: user?.lastName || "",
+    email: user?.email || "",
     bio: "Full Stack Developer passionate about building amazing products.",
     location: "San Francisco, CA",
     website: "https://johndoe.dev",
@@ -25,21 +28,58 @@ const Settings = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Sync form states with asynchronously loaded user context details
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+        email: user.email || "",
+        bio: user.bio || "Full Stack Developer passionate about building amazing products.",
+        location: user.location || "San Francisco, CA",
+        website: user.website || "https://johndoe.dev",
+      });
+      setAvatar(user.avatar || "");
+    }
+  }, [user]);
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        toast.error("Image size must be less than 2MB");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAvatar(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSave = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
-    // Simulate API update for settings
-    setTimeout(() => {
-      setLoading(false);
-      setUser((prev) => ({
-        ...prev,
+    try {
+      const data = await updateUserProfile({
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
-      }));
-      toast.success("Profile saved successfully!");
-    }, 1000);
+        avatar,
+      });
+      if (data.success && data.user) {
+        setUser(data.user);
+        toast.success("Profile saved successfully!");
+      } else {
+        toast.error(data.message || "Failed to update profile");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Failed to update profile");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const menuItems = [
@@ -91,13 +131,25 @@ const Settings = () => {
 
               {/* Avatar section */}
               <div className="flex flex-col sm:flex-row items-center gap-4">
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  accept="image/*"
+                  className="hidden"
+                />
                 <img
-                  src={user?.avatar || `https://api.dicebear.com/7.x/adventurer/svg?seed=${formData.firstName}`}
+                  src={avatar || `https://api.dicebear.com/7.x/adventurer/svg?seed=${formData.firstName}`}
                   alt="avatar"
                   className="h-20 w-20 rounded-2xl bg-indigo-50 border border-slate-100 object-cover"
                 />
                 <div className="text-center sm:text-left">
-                  <Button variant="outline" size="sm" className="font-bold text-xs">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="font-bold text-xs"
+                    onClick={() => fileInputRef.current?.click()}
+                  >
                     Change Photo
                   </Button>
                   <p className="text-[10px] text-slate-400 font-semibold mt-1">
