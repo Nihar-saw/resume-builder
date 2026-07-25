@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useResume } from "../context/ResumeContext";
 import { downloadPDF, downloadDOCX } from "../api/pdf.api";
@@ -21,12 +21,35 @@ import { toast } from "react-hot-toast";
 const ResumeBuilder = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { currentResume, fetchResumeById, updateCurrentResume, saving } = useResume();
+  const { currentResume: dbResume, fetchResumeById, updateCurrentResume, saving } = useResume();
   
   const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState("personal");
   const [aiPrompt, setAiPrompt] = useState("");
   const [generatingWithAI, setGeneratingWithAI] = useState(false);
+
+  // Local form state for instant typing (no API call per keystroke)
+  const [localResume, setLocalResume] = useState(null);
+  const saveTimerRef = useRef(null);
+
+  // Computed state to merge local modifications with database version
+  const currentResume = localResume || dbResume;
+
+  // Sync localResume from context when it first loads or after AI autofill
+  useEffect(() => {
+    if (dbResume && !localResume) {
+      setLocalResume(dbResume);
+    }
+  }, [dbResume]);
+
+  // Debounced save: persist to backend 1s after last edit
+  const debouncedSave = useCallback((updatedResume) => {
+    setLocalResume(updatedResume);
+    if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+    saveTimerRef.current = setTimeout(() => {
+      updateCurrentResume(id, updatedResume);
+    }, 1000);
+  }, [id, updateCurrentResume]);
 
   const handleAIGenerate = async (e) => {
     e.preventDefault();
@@ -60,6 +83,7 @@ const ResumeBuilder = () => {
           projects: data.resume.projects || currentResume.projects || [],
         };
         await updateCurrentResume(id, merged);
+        setLocalResume(merged);
         toast.success("Resume populated with AI suggestions!");
         setAiPrompt("");
       } else {
@@ -86,26 +110,28 @@ const ResumeBuilder = () => {
     loadResume();
   }, [id, fetchResumeById, navigate]);
 
-  // Form State Handlers
+  // Form State Handlers (use localResume + debouncedSave for smooth typing)
+  const r = localResume || currentResume;
+
   const handlePersonalInfoChange = (e) => {
     const { name, value } = e.target;
     const updated = {
-      ...currentResume,
+      ...r,
       personalInfo: {
-        ...currentResume.personalInfo,
+        ...r.personalInfo,
         [name]: value,
       },
     };
-    updateCurrentResume(id, updated);
+    debouncedSave(updated);
   };
 
   const handleTitleChange = (e) => {
-    updateCurrentResume(id, { ...currentResume, title: e.target.value });
+    debouncedSave({ ...r, title: e.target.value });
   };
 
   // Education Handlers
   const addEducation = () => {
-    const eduList = [...(currentResume.education || [])];
+    const eduList = [...(r.education || [])];
     eduList.push({
       school: "School Name",
       degree: "Degree (e.g. BS)",
@@ -114,23 +140,23 @@ const ResumeBuilder = () => {
       endDate: "",
       description: "",
     });
-    updateCurrentResume(id, { ...currentResume, education: eduList });
+    debouncedSave({ ...r, education: eduList });
   };
 
   const handleEducationChange = (index, field, value) => {
-    const eduList = [...(currentResume.education || [])];
+    const eduList = [...(r.education || [])];
     eduList[index] = { ...eduList[index], [field]: value };
-    updateCurrentResume(id, { ...currentResume, education: eduList });
+    debouncedSave({ ...r, education: eduList });
   };
 
   const removeEducation = (index) => {
-    const eduList = (currentResume.education || []).filter((_, i) => i !== index);
-    updateCurrentResume(id, { ...currentResume, education: eduList });
+    const eduList = (r.education || []).filter((_, i) => i !== index);
+    debouncedSave({ ...r, education: eduList });
   };
 
   // Experience Handlers
   const addExperience = () => {
-    const expList = [...(currentResume.experience || [])];
+    const expList = [...(r.experience || [])];
     expList.push({
       company: "Company Name",
       position: "Job Title",
@@ -140,52 +166,52 @@ const ResumeBuilder = () => {
       currentlyWorking: false,
       description: [""],
     });
-    updateCurrentResume(id, { ...currentResume, experience: expList });
+    debouncedSave({ ...r, experience: expList });
   };
 
   const handleExperienceChange = (index, field, value) => {
-    const expList = [...(currentResume.experience || [])];
+    const expList = [...(r.experience || [])];
     expList[index] = { ...expList[index], [field]: value };
-    updateCurrentResume(id, { ...currentResume, experience: expList });
+    debouncedSave({ ...r, experience: expList });
   };
 
   const handleExperienceBulletChange = (expIndex, bulletIndex, value) => {
-    const expList = [...(currentResume.experience || [])];
+    const expList = [...(r.experience || [])];
     const bullets = [...(expList[expIndex].description || [])];
     bullets[bulletIndex] = value;
     expList[expIndex] = { ...expList[expIndex], description: bullets };
-    updateCurrentResume(id, { ...currentResume, experience: expList });
+    debouncedSave({ ...r, experience: expList });
   };
 
   const addExperienceBullet = (index) => {
-    const expList = [...(currentResume.experience || [])];
+    const expList = [...(r.experience || [])];
     const bullets = [...(expList[index].description || [])];
     bullets.push("");
     expList[index] = { ...expList[index], description: bullets };
-    updateCurrentResume(id, { ...currentResume, experience: expList });
+    debouncedSave({ ...r, experience: expList });
   };
 
   const removeExperienceBullet = (expIndex, bulletIndex) => {
-    const expList = [...(currentResume.experience || [])];
+    const expList = [...(r.experience || [])];
     const bullets = (expList[expIndex].description || []).filter((_, i) => i !== bulletIndex);
     expList[expIndex] = { ...expList[expIndex], description: bullets };
-    updateCurrentResume(id, { ...currentResume, experience: expList });
+    debouncedSave({ ...r, experience: expList });
   };
 
   const removeExperience = (index) => {
-    const expList = (currentResume.experience || []).filter((_, i) => i !== index);
-    updateCurrentResume(id, { ...currentResume, experience: expList });
+    const expList = (r.experience || []).filter((_, i) => i !== index);
+    debouncedSave({ ...r, experience: expList });
   };
 
   // Skills
   const handleSkillsChange = (e) => {
-    const skillsArray = e.target.value.split(",").map((s) => s.trim());
-    updateCurrentResume(id, { ...currentResume, skills: skillsArray });
+    const skillsArray = e.target.value.split(",").map((s) => s.trimStart());
+    debouncedSave({ ...r, skills: skillsArray });
   };
 
   // Projects
   const addProject = () => {
-    const projList = [...(currentResume.projects || [])];
+    const projList = [...(r.projects || [])];
     projList.push({
       title: "Project Title",
       description: "",
@@ -193,22 +219,22 @@ const ResumeBuilder = () => {
       github: "",
       liveDemo: "",
     });
-    updateCurrentResume(id, { ...currentResume, projects: projList });
+    debouncedSave({ ...r, projects: projList });
   };
 
   const handleProjectChange = (index, field, value) => {
-    const projList = [...(currentResume.projects || [])];
+    const projList = [...(r.projects || [])];
     if (field === "technologies") {
-      projList[index] = { ...projList[index], [field]: value.split(",").map((t) => t.trim()) };
+      projList[index] = { ...projList[index], [field]: value.split(",").map((t) => t.trimStart()) };
     } else {
       projList[index] = { ...projList[index], [field]: value };
     }
-    updateCurrentResume(id, { ...currentResume, projects: projList });
+    debouncedSave({ ...r, projects: projList });
   };
 
   const removeProject = (index) => {
-    const projList = (currentResume.projects || []).filter((_, i) => i !== index);
-    updateCurrentResume(id, { ...currentResume, projects: projList });
+    const projList = (r.projects || []).filter((_, i) => i !== index);
+    debouncedSave({ ...r, projects: projList });
   };
 
   // Download logic
@@ -533,7 +559,7 @@ const ResumeBuilder = () => {
                   </Button>
                 </div>
 
-                {(currentResume.education || []).map((edu, eduIdx) => (
+                {(currentResume?.education || []).map((edu, eduIdx) => (
                   <div key={eduIdx} className="space-y-4 border border-slate-100 rounded-2xl p-4 bg-slate-50/30 relative">
                     <button
                       onClick={() => removeEducation(eduIdx)}
@@ -584,7 +610,7 @@ const ResumeBuilder = () => {
                   name="skills"
                   type="textarea"
                   placeholder="e.g. React, Node.js, Express, JavaScript, MongoDB, CSS"
-                  value={(currentResume.skills || []).join(", ")}
+                  value={(currentResume?.skills || []).join(", ")}
                   onChange={handleSkillsChange}
                   rows={4}
                 />
@@ -602,7 +628,7 @@ const ResumeBuilder = () => {
                   </Button>
                 </div>
 
-                {(currentResume.projects || []).map((proj, projIdx) => (
+                {(currentResume?.projects || []).map((proj, projIdx) => (
                   <div key={projIdx} className="space-y-4 border border-slate-100 rounded-2xl p-4 bg-slate-50/30 relative">
                     <button
                       onClick={() => removeProject(projIdx)}
