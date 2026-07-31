@@ -46,7 +46,7 @@ const AppRoutes = () => {
       <Route element={<PrivateRoute />}>
         <Route element={<DashboardLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/resumes" element={<Dashboard />} /> {/* Fallback to dashboard or general list */}
+          <Route path="/resumes" element={<Resumes />} />
           <Route path="/ats" element={<ATSChecker />} />
           <Route path="/ai-assistant" element={<AIAssistant />} />
           <Route path="/templates" element={<Templates />} />

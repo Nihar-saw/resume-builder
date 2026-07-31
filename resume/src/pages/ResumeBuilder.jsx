@@ -16,7 +16,100 @@ import Card from "../components/common/Card";
 import Button from "../components/common/Button";
 import Input from "../components/common/Input";
 import Loader from "../components/common/Loader";
-import { toast } from "react-hot-toast";
+
+const RESUME_STYLES = [
+  {
+    name: "Modern Minimal",
+    wrapper: "bg-white font-sans text-slate-800",
+    header: "border-b border-slate-100 pb-4 mb-4",
+    nameText: "text-xl font-bold text-slate-900 leading-none",
+    titleText: "text-xs text-indigo-600 font-semibold mt-1.5",
+    sectionTitle: "font-extrabold uppercase text-indigo-600 text-[10px] tracking-wider mb-1.5",
+    textPrimary: "text-slate-800 text-[10px]",
+    textSecondary: "text-slate-500 text-[10px]",
+    dateText: "text-slate-400 text-[9px]",
+    skillPill: "bg-slate-50 border border-slate-100 rounded-md px-1.5 py-0.5 text-[8.5px] font-bold text-slate-600",
+    headerAlign: "text-left justify-start"
+  },
+  {
+    name: "Classic Serif",
+    wrapper: "bg-[#FAFAFA] font-serif text-gray-900",
+    header: "border-b-2 border-gray-800 pb-4 mb-4 text-center",
+    nameText: "text-2xl font-black text-gray-900 tracking-tight leading-none text-center",
+    titleText: "text-xs text-gray-600 italic mt-1.5 text-center font-medium",
+    sectionTitle: "font-bold uppercase text-gray-900 text-[10.5px] tracking-widest border-b border-gray-300 mb-2 pb-0.5",
+    textPrimary: "text-gray-900 text-[10px] font-medium",
+    textSecondary: "text-gray-700 text-[10px] leading-relaxed",
+    dateText: "text-gray-500 text-[9px] italic",
+    skillPill: "bg-transparent border border-gray-400 px-1.5 py-0.5 text-[8.5px] font-bold text-gray-700",
+    headerAlign: "text-center justify-center"
+  },
+  {
+    name: "Bold Dark",
+    wrapper: "bg-slate-900 font-sans text-slate-100",
+    header: "bg-indigo-600 -mx-6 -mt-6 p-6 mb-5 text-white",
+    nameText: "text-xl font-black text-white leading-none",
+    titleText: "text-xs text-indigo-200 font-bold mt-1",
+    sectionTitle: "font-black uppercase text-indigo-400 text-[10px] tracking-wider mb-2",
+    textPrimary: "text-slate-100 text-[10px]",
+    textSecondary: "text-slate-300 text-[10px]",
+    dateText: "text-indigo-300 text-[9px]",
+    skillPill: "bg-indigo-900 border border-indigo-700 rounded px-1.5 py-0.5 text-[8.5px] font-bold text-indigo-100",
+    headerAlign: "text-left justify-start"
+  },
+  {
+    name: "Creative Modern",
+    wrapper: "bg-stone-50 font-sans text-stone-800",
+    header: "border-l-4 border-rose-500 pl-4 mb-5",
+    nameText: "text-2xl font-black text-stone-900 leading-none tracking-tighter",
+    titleText: "text-xs text-rose-600 font-bold mt-1 uppercase tracking-widest",
+    sectionTitle: "font-black uppercase text-stone-900 text-[11px] tracking-wider mb-1.5",
+    textPrimary: "text-stone-800 text-[10px] font-semibold",
+    textSecondary: "text-stone-600 text-[10px]",
+    dateText: "text-stone-400 text-[9px] font-bold",
+    skillPill: "bg-stone-200 text-stone-800 rounded-full px-2 py-0.5 text-[8px] font-black uppercase tracking-wider",
+    headerAlign: "text-left justify-start"
+  },
+  {
+    name: "Tech Monospace",
+    wrapper: "bg-gray-50 font-mono text-gray-800",
+    header: "border-b-2 border-emerald-500 pb-4 mb-4",
+    nameText: "text-xl font-bold text-emerald-700 leading-none",
+    titleText: "text-xs text-gray-500 mt-1.5",
+    sectionTitle: "font-bold uppercase text-emerald-600 text-[10px] mb-1.5 bg-emerald-50 inline-block px-1",
+    textPrimary: "text-gray-900 text-[9px]",
+    textSecondary: "text-gray-600 text-[9px]",
+    dateText: "text-gray-400 text-[8.5px]",
+    skillPill: "bg-gray-200 border border-gray-300 rounded-sm px-1.5 py-0.5 text-[8px] text-gray-700 font-bold",
+    headerAlign: "text-left justify-start"
+  },
+  {
+    name: "Corporate Blue",
+    wrapper: "bg-white font-sans text-slate-800",
+    header: "bg-blue-800 -mx-6 -mt-6 p-6 mb-5 text-white flex flex-col items-center",
+    nameText: "text-2xl font-bold text-white leading-none text-center",
+    titleText: "text-xs text-blue-200 mt-1.5 text-center font-medium",
+    sectionTitle: "font-bold uppercase text-blue-800 text-[11px] border-b-2 border-blue-800 mb-2 pb-0.5",
+    textPrimary: "text-slate-800 text-[10px] font-bold",
+    textSecondary: "text-slate-600 text-[10px]",
+    dateText: "text-slate-500 text-[9px]",
+    skillPill: "bg-blue-50 border border-blue-100 rounded text-blue-800 px-1.5 py-0.5 text-[8.5px] font-semibold",
+    headerAlign: "text-center justify-center text-blue-100"
+  },
+  {
+    name: "Elegant Gold",
+    wrapper: "bg-amber-50/30 font-serif text-stone-800",
+    header: "border-b pb-4 mb-4 border-amber-200",
+    nameText: "text-2xl font-normal text-amber-700 tracking-wide leading-none",
+    titleText: "text-xs text-stone-500 mt-1.5 tracking-widest uppercase",
+    sectionTitle: "font-normal uppercase text-amber-700 text-[11px] tracking-[0.2em] mb-2 text-center",
+    textPrimary: "text-stone-800 text-[10px]",
+    textSecondary: "text-stone-600 text-[10px]",
+    dateText: "text-amber-600/80 text-[9px] italic",
+    skillPill: "bg-transparent border border-amber-200 text-amber-800 px-2 py-0.5 text-[8px] tracking-wider",
+    headerAlign: "text-left justify-start"
+  }
+];
 
 const ResumeBuilder = () => {
   const { id } = useParams();
@@ -27,6 +120,10 @@ const ResumeBuilder = () => {
   const [activeSection, setActiveSection] = useState("personal");
   const [aiPrompt, setAiPrompt] = useState("");
   const [generatingWithAI, setGeneratingWithAI] = useState(false);
+  const [styleIndex, setStyleIndex] = useState(0);
+  const [styleSearch, setStyleSearch] = useState("");
+
+  const activeStyle = RESUME_STYLES[styleIndex];
 
   // Local form state for instant typing (no API call per keystroke)
   const [localResume, setLocalResume] = useState(null);
@@ -58,7 +155,7 @@ const ResumeBuilder = () => {
       return;
     }
     setGeneratingWithAI(true);
-    toast.loading("AI is generating resume details...");
+    toast.loading("AI is generating resume details — this may take a minute...");
     try {
       const data = await generateResumeFromPrompt(aiPrompt);
       toast.dismiss();
@@ -87,12 +184,10 @@ const ResumeBuilder = () => {
         toast.success("Resume populated with AI suggestions!");
         setAiPrompt("");
       } else {
-        toast.error("Failed to generate details. Please check Ollama.");
+        console.error(data.message || "Failed to generate details. Please check Ollama.");
       }
     } catch (err) {
-      toast.dismiss();
       console.error(err);
-      toast.error(err.message || "Failed to generate details. Make sure Ollama is running.");
     } finally {
       setGeneratingWithAI(false);
     }
@@ -102,7 +197,6 @@ const ResumeBuilder = () => {
     const loadResume = async () => {
       const data = await fetchResumeById(id);
       if (!data) {
-        toast.error("Resume not found");
         navigate("/dashboard");
       }
       setLoading(false);
@@ -239,17 +333,11 @@ const ResumeBuilder = () => {
 
   // Download logic
   const handleDownloadPDF = async () => {
-    toast.loading("Generating PDF...");
     await downloadPDF(id, currentResume?.title || "resume");
-    toast.dismiss();
-    toast.success("Download started");
   };
 
   const handleDownloadDOCX = async () => {
-    toast.loading("Generating Word document...");
     await downloadDOCX(id, currentResume?.title || "resume");
-    toast.dismiss();
-    toast.success("Download started");
   };
 
   if (loading) {
@@ -671,65 +759,137 @@ const ResumeBuilder = () => {
         </main>
 
         {/* Right Side: Live Resume Preview (as requested in the picture grid) */}
-        <section className="hidden lg:flex w-96 border-l border-slate-100 bg-white p-6 overflow-y-auto flex-col gap-6">
-          <h3 className="text-sm font-bold uppercase tracking-widest text-slate-500 text-left">Live Preview</h3>
+        <section 
+          className="hidden lg:flex w-[450px] border-l border-slate-100 bg-slate-100/50 p-6 overflow-y-auto flex-col items-center gap-4"
+        >
+          <div className="flex w-full flex-col mb-2 gap-3">
+            <h3 className="text-sm font-bold uppercase tracking-widest text-slate-500">Live Preview</h3>
+            
+            <div className="flex items-center gap-2 bg-white p-2 rounded-xl border border-slate-200 shadow-sm w-full">
+              <input 
+                type="text" 
+                placeholder="Search style..." 
+                value={styleSearch}
+                onChange={(e) => setStyleSearch(e.target.value)}
+                className="text-xs px-2 py-1.5 rounded-lg border-none bg-slate-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-indigo-500 flex-1"
+              />
+              <select
+                value={styleIndex}
+                onChange={(e) => setStyleIndex(Number(e.target.value))}
+                className="text-xs font-bold text-slate-700 bg-transparent border-l border-slate-200 pl-2 focus:outline-none flex-1 max-w-[140px] truncate"
+              >
+                {RESUME_STYLES.map((style, idx) => {
+                  if (styleSearch && !style.name.toLowerCase().includes(styleSearch.toLowerCase())) return null;
+                  return (
+                    <option key={idx} value={idx}>{style.name}</option>
+                  );
+                })}
+              </select>
+            </div>
+          </div>
           
-          <div className="border border-slate-150 rounded-2xl p-6 shadow-premium text-left space-y-6 text-[10px]">
+          {/* Resume A4 Paper container */}
+          <div 
+            className={`w-[400px] min-h-[565px] border border-slate-200/60 shadow-xl overflow-hidden cursor-default transition-all duration-300 rounded-sm ${activeStyle.wrapper}`}
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* Header info */}
-            <div className="border-b border-slate-100 pb-3">
-              <h4 className="text-base font-bold text-slate-900 leading-none">
+            <div className={`px-6 pt-6 ${activeStyle.header}`}>
+              <h4 className={activeStyle.nameText}>
                 {currentResume?.personalInfo?.fullName || "John Doe"}
               </h4>
-              <p className="text-xs text-indigo-600 font-semibold mt-1">
+              <p className={activeStyle.titleText}>
                 {currentResume?.experience?.[0]?.position || "Full Stack Developer"}
               </p>
-              <div className="flex flex-wrap gap-x-2 text-[9px] text-slate-400 mt-1">
-                {currentResume?.personalInfo?.email && <span>{currentResume.personalInfo.email}</span>}
-                {currentResume?.personalInfo?.location && <span>{currentResume.personalInfo.location}</span>}
+              <div className={`flex flex-wrap gap-x-3 mt-2 ${activeStyle.headerAlign}`}>
+                {currentResume?.personalInfo?.email && <span className={activeStyle.textSecondary}>{currentResume.personalInfo.email}</span>}
+                {currentResume?.personalInfo?.location && <span className={activeStyle.textSecondary}>{currentResume.personalInfo.location}</span>}
+                {currentResume?.personalInfo?.phone && <span className={activeStyle.textSecondary}>{currentResume.personalInfo.phone}</span>}
               </div>
             </div>
 
-            {/* Summary */}
-            {currentResume?.personalInfo?.summary && (
-              <div>
-                <p className="font-extrabold uppercase text-indigo-600 text-[9px] tracking-wider">Summary</p>
-                <p className="text-slate-500 leading-relaxed mt-1 text-[9px]">{currentResume.personalInfo.summary}</p>
-              </div>
-            )}
-
-            {/* Work */}
-            {currentResume?.experience?.length > 0 && (
-              <div className="space-y-2">
-                <p className="font-extrabold uppercase text-indigo-600 text-[9px] tracking-wider">Experience</p>
-                {currentResume.experience.map((exp, idx) => (
-                  <div key={idx} className="space-y-0.5">
-                    <div className="flex justify-between font-bold text-slate-800 text-[9px]">
-                      <span>{exp.position} at {exp.company}</span>
-                      <span className="text-slate-400">{exp.startDate ? exp.startDate.substring(0, 7) : ""}</span>
-                    </div>
-                    <ul className="list-disc list-inside text-slate-500 pl-1">
-                      {exp.description?.map((bullet, bIdx) => (
-                        <li key={bIdx}>{bullet}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Skills */}
-            {currentResume?.skills?.length > 0 && (
-              <div>
-                <p className="font-extrabold uppercase text-indigo-600 text-[9px] tracking-wider">Skills</p>
-                <div className="flex flex-wrap gap-1 mt-1">
-                  {currentResume.skills.map((s, idx) => (
-                    <span key={idx} className="bg-slate-50 border border-slate-100 rounded-md px-1.5 py-0.5 text-[8px] font-bold text-slate-650">
-                      {s}
-                    </span>
-                  ))}
+            <div className={`px-6 pb-6 pt-2 space-y-4`}>
+              {/* Summary */}
+              {currentResume?.personalInfo?.summary && (
+                <div>
+                  <p className={activeStyle.sectionTitle}>Summary</p>
+                  <p className={activeStyle.textSecondary}>{currentResume.personalInfo.summary}</p>
                 </div>
-              </div>
-            )}
+              )}
+
+              {/* Work */}
+              {currentResume?.experience?.length > 0 && (
+                <div>
+                  <p className={activeStyle.sectionTitle}>Experience</p>
+                  <div className="space-y-3 mt-1.5">
+                    {currentResume.experience.map((exp, idx) => (
+                      <div key={idx} className="space-y-1">
+                        <div className={`flex justify-between ${activeStyle.textPrimary}`}>
+                          <span><span className="font-bold">{exp.position}</span> at {exp.company}</span>
+                          <span className={activeStyle.dateText}>{exp.startDate ? exp.startDate.substring(0, 7) : ""}</span>
+                        </div>
+                        <ul className={`list-disc list-outside ml-3.5 ${activeStyle.textSecondary}`}>
+                          {exp.description?.map((bullet, bIdx) => (
+                            <li key={bIdx}>{bullet}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {/* Education */}
+              {currentResume?.education?.length > 0 && (
+                <div>
+                  <p className={activeStyle.sectionTitle}>Education</p>
+                  <div className="space-y-2 mt-1.5">
+                    {currentResume.education.map((edu, idx) => (
+                      <div key={idx} className={`flex justify-between ${activeStyle.textPrimary}`}>
+                        <span><span className="font-bold">{edu.degree}</span> in {edu.fieldOfStudy}, {edu.school}</span>
+                        <span className={activeStyle.dateText}>{edu.startDate ? edu.startDate.substring(0, 4) : ""}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Skills */}
+              {currentResume?.skills?.length > 0 && (
+                <div>
+                  <p className={activeStyle.sectionTitle}>Skills</p>
+                  <div className="flex flex-wrap gap-1.5 mt-1.5">
+                    {currentResume.skills.map((s, idx) => (
+                      <span key={idx} className={activeStyle.skillPill}>
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {/* Projects */}
+              {currentResume?.projects?.length > 0 && (
+                <div>
+                  <p className={activeStyle.sectionTitle}>Projects</p>
+                  <div className="space-y-2 mt-1.5">
+                    {currentResume.projects.map((proj, idx) => (
+                      <div key={idx} className="space-y-0.5">
+                        <div className={`flex justify-between ${activeStyle.textPrimary}`}>
+                          <span className="font-bold">{proj.title}</span>
+                        </div>
+                        <p className={activeStyle.textSecondary}>{proj.description}</p>
+                        {proj.technologies?.length > 0 && (
+                          <div className={`text-[8px] text-slate-400 mt-0.5 flex flex-wrap gap-1 ${activeStyle.textSecondary}`}>
+                            Technologies: {proj.technologies.join(", ")}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </section>
 

@@ -60,13 +60,12 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className="sticky top-16 hidden h-[calc(100vh-4rem)] w-64 border-r border-slate-100 bg-white p-4 md:flex flex-col justify-between">
+    <aside className="sticky top-16 hidden h-[calc(100vh-4rem)] w-64 border-r border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 md:flex flex-col justify-between">
       {/* Upper links */}
       <div className="space-y-1">
         {navItems.map((item) => {
           const Icon = item.icon;
-          const isActive = location.pathname === item.path || 
-            (item.path === "/resumes" && location.pathname === "/dashboard");
+          const isActive = location.pathname === item.path;
           
           return (
             <NavLink
@@ -74,8 +73,8 @@ const Sidebar = () => {
               to={item.path}
               className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 ${
                 isActive
-                  ? "bg-indigo-50 text-indigo-600 shadow-sm"
-                  : "text-slate-500 hover:bg-slate-50 hover:text-slate-800"
+                  ? "bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 shadow-sm"
+                  : "text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-slate-200"
               }`}
             >
               <Icon className="h-5 w-5" />
@@ -89,7 +88,7 @@ const Sidebar = () => {
       <div>
         <button
           onClick={handleLogout}
-          className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-red-500 hover:bg-red-50 transition-all duration-200"
+          className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200"
         >
           <IoLogOutOutline className="h-5 w-5" />
           Log Out

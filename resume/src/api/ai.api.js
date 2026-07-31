@@ -26,6 +26,6 @@ export const generateInterviewQuestions = async (resume, jobTitle) => {
 };
 
 export const generateResumeFromPrompt = async (prompt) => {
-  const response = await API.post("/ai/generate", { prompt }, { timeout: 300000 });
+  const response = await API.post("/ai/generate", { prompt }, { timeout: 60000 });
   return response.data;
 };

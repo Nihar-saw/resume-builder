@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect, useContext } from "react";
+import { createContext, useState, useEffect, useContext, useCallback } from "react";
 import { registerUser, loginUser, logoutUser, getMe } from "../api/auth.api";
 
 export const AuthContext = createContext(null);
@@ -6,7 +6,7 @@ export const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [token, setTokenState] = useState(localStorage.getItem("token"));
+  const [token, setTokenState] = useState(sessionStorage.getItem("token"));
 
   useEffect(() => {
     const initializeAuth = async () => {
@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
   }, [token]);
 
   const handleLogoutState = () => {
-    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
     setTokenState(null);
     setUser(null);
   };
@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const data = await loginUser(credentials);
       if (data.success && data.accessToken) {
-        localStorage.setItem("token", data.accessToken);
+        sessionStorage.setItem("token", data.accessToken);
         setTokenState(data.accessToken);
         setUser(data.user);
         return { success: true };
@@ -61,7 +61,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const data = await registerUser(userData);
       if (data.success && data.accessToken) {
-        localStorage.setItem("token", data.accessToken);
+        sessionStorage.setItem("token", data.accessToken);
         setTokenState(data.accessToken);
         setUser(data.user);
         return { success: true };

@@ -64,7 +64,7 @@ const Register = () => {
       <div className="text-left">
         <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">Create Account</h2>
         <p className="mt-2 text-sm text-slate-500">
-          Start your journey with ResumeAI.
+          Start your journey with AstraCV.
         </p>
       </div>
 

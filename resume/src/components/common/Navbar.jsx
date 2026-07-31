@@ -17,17 +17,17 @@ const Navbar = ({ isDashboard = false }) => {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-slate-100 bg-white/80 backdrop-blur-md">
+    <header className="sticky top-0 z-40 w-full border-b border-slate-100 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         
         {/* Left: Logo & Search */}
         <div className="flex items-center gap-8">
           <Link to={isAuthenticated ? "/dashboard" : "/"} className="flex items-center gap-2">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-600 text-white font-extrabold text-lg shadow-md shadow-indigo-600/30">
-              R
+              A
             </div>
-            <span className="text-xl font-bold tracking-tight text-slate-800">
-              Resume<span className="text-indigo-600">AI</span>
+            <span className="text-xl font-bold tracking-tight text-slate-800 dark:text-white">
+              Astra<span className="text-indigo-600">CV</span>
             </span>
           </Link>
 
@@ -40,7 +40,7 @@ const Navbar = ({ isDashboard = false }) => {
               <input
                 type="text"
                 placeholder="Search resumes, templates..."
-                className="w-full rounded-xl border border-slate-100 bg-slate-50 py-1.5 pl-10 pr-4 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all duration-200"
+                className="w-full rounded-xl border border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 py-1.5 pl-10 pr-4 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-indigo-500 focus:bg-white dark:focus:bg-slate-700 focus:outline-none transition-all duration-200"
               />
             </div>
           )}
@@ -58,21 +58,14 @@ const Navbar = ({ isDashboard = false }) => {
 
         {/* Right Action Section */}
         <div className="flex items-center gap-4">
-          {/* Theme Toggle */}
-          <button
-            onClick={toggleTheme}
-            className="rounded-xl p-2 text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-all active:scale-95"
-            aria-label="Toggle Theme"
-          >
-            {isDark ? <IoSunnyOutline className="h-5 w-5" /> : <IoMoonOutline className="h-5 w-5" />}
-          </button>
+          {/* Theme toggle removed */}
 
           {isAuthenticated ? (
             /* Logged-in Controls */
             <div className="flex items-center gap-3">
               {/* Notifications */}
               <button
-                className="relative rounded-xl p-2 text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-all"
+                className="relative rounded-xl p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-white transition-all"
                 aria-label="View notifications"
               >
                 <IoNotificationsOutline className="h-5 w-5" />
@@ -83,7 +76,7 @@ const Navbar = ({ isDashboard = false }) => {
               <div className="relative">
                 <button
                   onClick={() => setDropdownOpen(!dropdownOpen)}
-                  className="flex items-center gap-2 rounded-xl p-1.5 hover:bg-slate-50 transition-all"
+                  className="flex items-center gap-2 rounded-xl p-1.5 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"
                 >
                   <img
                     src={user?.avatar || `https://api.dicebear.com/7.x/adventurer/svg?seed=${user?.firstName || 'User'}`}
@@ -91,8 +84,8 @@ const Navbar = ({ isDashboard = false }) => {
                     className="h-8 w-8 rounded-xl object-cover bg-indigo-50 border border-slate-100"
                   />
                   <div className="hidden sm:block text-left">
-                    <p className="text-xs font-semibold text-slate-800">{user?.firstName || "John"}</p>
-                    <p className="text-[10px] text-slate-400 font-medium">Free Plan</p>
+                    <p className="text-xs font-semibold text-slate-800 dark:text-slate-200">{user?.firstName || "John"}</p>
+                    <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium">Free Plan</p>
                   </div>
                   <IoChevronDownOutline className={`h-3 w-3 text-slate-400 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
@@ -101,15 +94,15 @@ const Navbar = ({ isDashboard = false }) => {
                 {dropdownOpen && (
                   <>
                     <div className="fixed inset-0 z-30" onClick={() => setDropdownOpen(false)} />
-                    <div className="absolute right-0 mt-2 w-52 origin-top-right rounded-2xl border border-slate-100 bg-white p-2 shadow-xl ring-1 ring-black/5 z-40 animate-in fade-in slide-in-from-top-2 duration-200">
-                      <div className="px-3 py-2 border-b border-slate-50 mb-1">
-                        <p className="text-sm font-semibold text-slate-800">{user?.firstName} {user?.lastName}</p>
+                    <div className="absolute right-0 mt-2 w-52 origin-top-right rounded-2xl border border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-800 p-2 shadow-xl ring-1 ring-black/5 z-40 animate-in fade-in slide-in-from-top-2 duration-200">
+                      <div className="px-3 py-2 border-b border-slate-50 dark:border-slate-700 mb-1">
+                        <p className="text-sm font-semibold text-slate-800 dark:text-slate-200">{user?.firstName} {user?.lastName}</p>
                         <p className="text-xs text-slate-400 truncate">{user?.email}</p>
                       </div>
                       <Link
                         to="/settings"
                         onClick={() => setDropdownOpen(false)}
-                        className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-indigo-600 transition-all"
+                        className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all"
                       >
                         <IoPersonOutline className="h-4 w-4" />
                         My Profile
@@ -117,7 +110,7 @@ const Navbar = ({ isDashboard = false }) => {
                       <Link
                         to="/settings"
                         onClick={() => setDropdownOpen(false)}
-                        className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-indigo-600 transition-all"
+                        className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all"
                       >
                         <IoSettingsOutline className="h-4 w-4" />
                         Settings
@@ -127,7 +120,7 @@ const Navbar = ({ isDashboard = false }) => {
                           setDropdownOpen(false);
                           handleLogout();
                         }}
-                        className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-all"
+                        className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all"
                       >
                         <IoLogOutOutline className="h-4 w-4" />
                         Log Out

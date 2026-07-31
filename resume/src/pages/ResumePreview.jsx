@@ -23,6 +23,7 @@ const ResumePreview = () => {
   const [themeColor, setThemeColor] = useState("indigo");
   const [font, setFont] = useState("sans");
   const [localResume, setLocalResume] = useState(null);
+  const [templateSearch, setTemplateSearch] = useState("");
 
   useEffect(() => {
     const loadResume = async () => {
@@ -37,6 +38,13 @@ const ResumePreview = () => {
     };
     loadResume();
   }, [id, fetchResumeById, navigate]);
+
+  // Keep localResume in sync with currentResume (e.g. when template changes)
+  useEffect(() => {
+    if (currentResume) {
+      setLocalResume(currentResume);
+    }
+  }, [currentResume]);
 
   // Handle direct inline contentEditable modifications
   const handleInlineEdit = async (path, val) => {
@@ -116,10 +124,10 @@ const ResumePreview = () => {
   };
 
   const handleDownloadPDF = async () => {
-    toast.loading("Generating PDF...");
-    await downloadPDF(id, currentResume?.title || "resume");
-    toast.dismiss();
-    toast.success("Download started");
+    toast.success("Ready to save! In the dialog, set Destination to 'Save as PDF' and Margins to 'None'.", { duration: 5000 });
+    setTimeout(() => {
+      window.print();
+    }, 1000);
   };
 
   const handleDownloadDOCX = async () => {
@@ -145,7 +153,7 @@ const ResumePreview = () => {
     }
   };
 
-  const templates = ["modern", "classic", "minimal", "creative"];
+  const templates = ["modern", "classic", "minimal", "creative", "corporate", "elegant", "tech"];
   const themeColors = ["indigo", "slate", "violet", "emerald", "rose"];
   const fonts = ["sans", "serif", "mono"];
 
@@ -161,11 +169,11 @@ const ResumePreview = () => {
 
   const getColorClass = (type = "text") => {
     const colors = {
-      indigo: { text: "text-indigo-650", bg: "bg-indigo-50/50 border-indigo-150 text-indigo-650", fill: "bg-indigo-650" },
-      slate: { text: "text-slate-800", bg: "bg-slate-50 border-slate-150 text-slate-800", fill: "bg-slate-800" },
-      violet: { text: "text-violet-650", bg: "bg-violet-50/50 border-violet-150 text-violet-650", fill: "bg-violet-650" },
-      emerald: { text: "text-emerald-600", bg: "bg-emerald-50/50 border-emerald-150 text-emerald-600", fill: "bg-emerald-600" },
-      rose: { text: "text-rose-650", bg: "bg-rose-50/50 border-rose-150 text-rose-650", fill: "bg-rose-650" },
+      indigo: { text: "text-indigo-600", bg: "bg-indigo-50/50 border-indigo-200 text-indigo-600", fill: "bg-indigo-600" },
+      slate: { text: "text-slate-800", bg: "bg-slate-50 border-slate-200 text-slate-800", fill: "bg-slate-800" },
+      violet: { text: "text-violet-600", bg: "bg-violet-50/50 border-violet-200 text-violet-600", fill: "bg-violet-600" },
+      emerald: { text: "text-emerald-600", bg: "bg-emerald-50/50 border-emerald-200 text-emerald-600", fill: "bg-emerald-600" },
+      rose: { text: "text-rose-600", bg: "bg-rose-50/50 border-rose-200 text-rose-600", fill: "bg-rose-600" },
     };
     return colors[themeColor]?.[type] || colors.indigo[type];
   };
@@ -175,14 +183,14 @@ const ResumePreview = () => {
     const templateStyle = currentResume.template || "modern";    // 1. Classic Template (Centered, elegant serif look)
     if (templateStyle === "classic") {
       return (
-        <div className={`w-full max-w-2xl bg-white rounded-3xl shadow-xl border border-slate-100/50 p-12 space-y-6 min-h-[842px] ${fontClass}`}>
+        <div className={`w-full max-w-2xl bg-white rounded-3xl shadow-xl border border-slate-100/50 p-12 space-y-6 min-h-[842px] print:rounded-none print:shadow-none print:border-none print:max-w-none print:w-full print:h-full print:min-h-0 print:m-0 ${fontClass}`}>
           {/* Header */}
           <div className="text-center border-b border-slate-200 pb-5 space-y-2">
             <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
               {renderEditable("personalInfo.fullName", personalInfo?.fullName, "text-3xl font-bold text-slate-900")}
             </h1>
             <p className={`font-bold text-xs uppercase tracking-wider ${getColorClass("text")}`}>
-              {experience?.[0] ? renderEditable("experience[0].position", experience[0].position, "font-bold text-xs") : "Full Stack Developer"}
+              {renderEditable("experience[0].position", experience?.[0]?.position, "font-bold text-xs", "Full Stack Developer")}
             </p>
             <div className="flex justify-center gap-4 text-xs text-slate-500 font-medium flex-wrap">
               {personalInfo?.email && <span>📧 {renderEditable("personalInfo.email", personalInfo.email)}</span>}
@@ -290,11 +298,11 @@ const ResumePreview = () => {
     // 2. Minimal Template (Simple, elegant alignment, clean left accents)
     if (templateStyle === "minimal") {
       return (
-        <div className={`w-full max-w-2xl bg-white rounded-3xl shadow-xl border border-slate-100/50 p-10 space-y-8 min-h-[842px] ${fontClass}`}>
+        <div className={`w-full max-w-2xl bg-white rounded-3xl shadow-xl border border-slate-100/50 p-10 space-y-8 min-h-[842px] print:rounded-none print:shadow-none print:border-none print:max-w-none print:w-full print:h-full print:min-h-0 print:m-0 ${fontClass}`}>
           {/* Header */}
           <div className="space-y-1">
             <h1 className="text-2xl font-bold text-slate-900 tracking-tight">{personalInfo?.fullName || "John Doe"}</h1>
-            <p className="text-slate-500 font-medium text-sm capitalize">{experience?.[0]?.position || "Full Stack Developer"}</p>
+            <p className="text-slate-500 font-medium text-sm capitalize">{renderEditable("experience[0].position", experience?.[0]?.position, "", "Full Stack Developer")}</p>
             <div className="flex gap-4 text-xs text-slate-400 font-medium flex-wrap pt-1">
               {personalInfo?.email && <span>{personalInfo.email}</span>}
               {personalInfo?.phone && <span>{personalInfo.phone}</span>}
@@ -380,7 +388,7 @@ const ResumePreview = () => {
     // 3. Creative Template (Two-column sidebar split design)
     if (templateStyle === "creative") {
       return (
-        <div className={`w-full max-w-2xl bg-white rounded-3xl shadow-xl border border-slate-100/50 overflow-hidden flex min-h-[842px] ${fontClass}`}>
+        <div className={`w-full max-w-2xl bg-white rounded-3xl shadow-xl border border-slate-100/50 overflow-hidden flex min-h-[842px] print:rounded-none print:shadow-none print:border-none print:max-w-none print:w-full print:h-full print:min-h-0 print:m-0 ${fontClass}`}>
           {/* Left Column Sidebar */}
           <div className="w-1/3 bg-slate-900 text-white p-6 space-y-6 text-left">
             <div className="space-y-3">
@@ -389,7 +397,7 @@ const ResumePreview = () => {
               </div>
               <div>
                 <h2 className="text-base font-bold tracking-tight">{personalInfo?.fullName || "John Doe"}</h2>
-                <p className="text-[10px] text-slate-400 uppercase font-bold mt-0.5 tracking-wider">{experience?.[0]?.position || "Developer"}</p>
+                <p className="text-[10px] text-slate-400 uppercase font-bold mt-0.5 tracking-wider">{renderEditable("experience[0].position", experience?.[0]?.position, "", "Full Stack Developer")}</p>
               </div>
             </div>
             
@@ -484,16 +492,322 @@ const ResumePreview = () => {
       );
     }
 
+    // 5. Tech Template (Terminal style)
+    if (templateStyle === "tech") {
+      return (
+        <div className={`w-full max-w-2xl bg-[#0D1117] text-emerald-400 rounded-3xl shadow-xl border border-emerald-500/30 p-10 space-y-6 min-h-[842px] print:bg-[#0D1117] print:rounded-none print:shadow-none print:border-none print:max-w-none print:w-full print:h-full print:min-h-0 print:m-0 ${fontClass}`}>
+          {/* Header */}
+          <div className="border-b-2 border-emerald-500/50 pb-5">
+            <h1 className="text-2xl font-bold tracking-wider">
+              &gt; {renderEditable("personalInfo.fullName", personalInfo?.fullName, "font-bold text-emerald-400")}
+            </h1>
+            <p className="font-bold text-sm mt-1.5 capitalize text-emerald-500/80">
+              $ {renderEditable("experience[0].position", experience?.[0]?.position, "", "Full Stack Developer")}
+            </p>
+            <div className="flex gap-4 text-[10px] text-emerald-600/70 mt-2 font-mono flex-wrap">
+              {personalInfo?.email && <span>[Email: {renderEditable("personalInfo.email", personalInfo.email)}]</span>}
+              {personalInfo?.phone && <span>[Phone: {renderEditable("personalInfo.phone", personalInfo.phone)}]</span>}
+              {personalInfo?.location && <span>[Loc: {renderEditable("personalInfo.location", personalInfo.location)}]</span>}
+            </div>
+          </div>
+          {/* Summary */}
+          {personalInfo?.summary && (
+            <div className="space-y-2">
+              <h4 className="text-xs font-bold uppercase tracking-widest text-emerald-500/90">## Summary</h4>
+              <p className="text-emerald-400/80 text-xs sm:text-sm leading-relaxed">
+                {renderEditable("personalInfo.summary", personalInfo.summary, "w-full block text-left")}
+              </p>
+            </div>
+          )}
+          {/* Experience */}
+          {experience?.length > 0 && (
+            <div className="space-y-4">
+              <h4 className="text-xs font-bold uppercase tracking-widest text-emerald-500/90">## Experience</h4>
+              <div className="space-y-4">
+                {experience.map((exp, idx) => (
+                  <div key={idx} className="space-y-1">
+                    <div className="flex justify-between font-bold text-emerald-300 text-xs sm:text-sm">
+                      <span>
+                        {renderEditable(`experience[${idx}].position`, exp.position, "font-bold")} @ {renderEditable(`experience[${idx}].company`, exp.company, "font-bold")}
+                      </span>
+                      <span className="text-emerald-600/80 font-medium text-[10px] sm:text-xs">
+                        {exp.startDate ? exp.startDate.substring(0, 7) : ""} : {exp.currentlyWorking ? "Present" : exp.endDate ? exp.endDate.substring(0, 7) : ""}
+                      </span>
+                    </div>
+                    <ul className="list-square list-inside text-emerald-400/80 text-[11px] leading-relaxed space-y-0.5 mt-1">
+                      {exp.description?.map((bullet, bIdx) => (
+                        <li key={bIdx} className="list-item">
+                          &gt; {renderEditable(`experience_bullet[${idx}][${bIdx}]`, bullet, "inline-block text-[11px]")}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {/* Education */}
+          {education?.length > 0 && (
+            <div className="space-y-4">
+              <h4 className="text-xs font-bold uppercase tracking-widest text-emerald-500/90">## Education</h4>
+              <div className="space-y-3">
+                {education.map((edu, idx) => (
+                  <div key={idx} className="flex justify-between items-start text-xs sm:text-sm text-emerald-300">
+                    <div>
+                      <span className="font-bold">
+                        {renderEditable(`education[${idx}].degree`, edu.degree, "font-bold")} in {renderEditable(`education[${idx}].fieldOfStudy`, edu.fieldOfStudy, "font-bold")}
+                      </span>
+                      <p className="text-[10px] sm:text-xs text-emerald-500/80 font-medium">
+                        {renderEditable(`education[${idx}].school`, edu.school, "font-medium")}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {/* Projects */}
+          {projects?.length > 0 && (
+            <div className="space-y-4">
+              <h4 className="text-xs font-bold uppercase tracking-widest text-emerald-500/90">## Projects</h4>
+              <div className="space-y-3">
+                {projects.map((proj, idx) => (
+                  <div key={idx} className="space-y-1 text-emerald-300">
+                    <span className="font-bold text-xs sm:text-sm">
+                      {renderEditable(`projects[${idx}].title`, proj.title, "font-bold")}
+                    </span>
+                    <p className="text-[11px] text-emerald-400/80 leading-relaxed">
+                      {renderEditable(`projects[${idx}].description`, proj.description, "w-full block text-left")}
+                    </p>
+                    {proj.technologies?.length > 0 && (
+                      <p className="text-[10px] text-emerald-600 mt-1">
+                        [{proj.technologies.join(", ")}]
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {/* Skills */}
+          {skills?.length > 0 && (
+            <div className="space-y-2">
+              <h4 className="text-xs font-bold uppercase tracking-widest text-emerald-500/90">## Skills</h4>
+              <div className="text-xs sm:text-sm text-emerald-400/90">
+                {renderEditable("skills", skills.join(" | "), "w-full block text-left font-bold")}
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // 6. Corporate Template
+    if (templateStyle === "corporate") {
+      return (
+        <div className={`w-full max-w-2xl bg-white rounded-3xl shadow-xl border border-slate-100/50 overflow-hidden flex flex-col min-h-[842px] print:rounded-none print:shadow-none print:border-none print:max-w-none print:w-full print:h-full print:min-h-0 print:m-0 ${fontClass}`}>
+          <div className={`p-10 pb-6 text-white text-center ${getColorClass("fill")}`}>
+             <h1 className="text-3xl font-bold">{renderEditable("personalInfo.fullName", personalInfo?.fullName)}</h1>
+             <p className="font-semibold text-white/80 mt-1 uppercase tracking-widest text-sm">{renderEditable("experience[0].position", experience?.[0]?.position, "", "Full Stack Developer")}</p>
+             <div className="flex justify-center gap-4 text-xs text-white/70 font-medium flex-wrap mt-3">
+               {personalInfo?.email && <span>{renderEditable("personalInfo.email", personalInfo.email)}</span>}
+               {personalInfo?.phone && <span>{renderEditable("personalInfo.phone", personalInfo.phone)}</span>}
+               {personalInfo?.location && <span>{renderEditable("personalInfo.location", personalInfo.location)}</span>}
+             </div>
+          </div>
+          <div className="p-10 space-y-6 bg-slate-50 flex-1">
+            {/* Same internal structure as classic but left-aligned */}
+            {/* Summary */}
+            {personalInfo?.summary && (
+              <div className="space-y-2">
+                <h4 className={`text-xs font-bold uppercase tracking-widest border-b-2 pb-1 ${getColorClass("text")} border-current`}>Professional Summary</h4>
+                <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                  {renderEditable("personalInfo.summary", personalInfo.summary, "w-full block text-left")}
+                </p>
+              </div>
+            )}
+            {/* Experience */}
+            {experience?.length > 0 && (
+              <div className="space-y-4">
+                <h4 className={`text-xs font-bold uppercase tracking-widest border-b-2 pb-1 ${getColorClass("text")} border-current`}>Professional History</h4>
+                <div className="space-y-4">
+                  {experience.map((exp, idx) => (
+                    <div key={idx} className="space-y-1">
+                      <div className="flex justify-between font-bold text-slate-900 text-xs sm:text-sm">
+                        <span>
+                          {renderEditable(`experience[${idx}].position`, exp.position, "font-bold")} at {renderEditable(`experience[${idx}].company`, exp.company, "font-bold")}
+                        </span>
+                        <span className="text-slate-500 font-medium text-[10px] sm:text-xs">
+                          {exp.startDate ? exp.startDate.substring(0, 7) : ""} - {exp.currentlyWorking ? "Present" : exp.endDate ? exp.endDate.substring(0, 7) : ""}
+                        </span>
+                      </div>
+                      <ul className="list-disc list-inside text-slate-600 text-xs leading-relaxed space-y-0.5 pl-1">
+                        {exp.description?.map((bullet, bIdx) => (
+                          <li key={bIdx} className="list-item text-left">
+                            {renderEditable(`experience_bullet[${idx}][${bIdx}]`, bullet, "inline-block text-xs")}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {/* Education */}
+            {education?.length > 0 && (
+              <div className="space-y-4">
+                <h4 className={`text-xs font-bold uppercase tracking-widest border-b-2 pb-1 ${getColorClass("text")} border-current`}>Education</h4>
+                <div className="space-y-3">
+                  {education.map((edu, idx) => (
+                    <div key={idx} className="flex justify-between items-start text-xs sm:text-sm">
+                      <div>
+                        <span className="font-bold text-slate-900">
+                          {renderEditable(`education[${idx}].degree`, edu.degree, "font-bold")} in {renderEditable(`education[${idx}].fieldOfStudy`, edu.fieldOfStudy, "font-bold")}
+                        </span>
+                        <p className="text-xs text-slate-500 font-medium mt-0.5">
+                          {renderEditable(`education[${idx}].school`, edu.school, "font-medium")}
+                        </p>
+                      </div>
+                      <span className="text-slate-500 text-xs">
+                        {edu.startDate ? edu.startDate.substring(0, 4) : ""} - {edu.endDate ? edu.endDate.substring(0, 4) : ""}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {/* Projects */}
+            {projects?.length > 0 && (
+              <div className="space-y-4">
+                <h4 className={`text-xs font-bold uppercase tracking-widest border-b-2 pb-1 ${getColorClass("text")} border-current`}>Projects</h4>
+                <div className="space-y-3">
+                  {projects.map((proj, idx) => (
+                    <div key={idx} className="space-y-1">
+                      <span className="font-bold text-slate-900 text-xs sm:text-sm">
+                        {renderEditable(`projects[${idx}].title`, proj.title, "font-bold")}
+                      </span>
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        {renderEditable(`projects[${idx}].description`, proj.description, "w-full block text-left")}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {/* Skills */}
+            {skills?.length > 0 && (
+              <div className="space-y-2">
+                <h4 className={`text-xs font-bold uppercase tracking-widest border-b-2 pb-1 ${getColorClass("text")} border-current`}>Skills</h4>
+                <div className="text-xs text-slate-700 font-bold">
+                  {renderEditable("skills", skills.join(" • "), "w-full block text-left")}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    // 7. Elegant Template
+    if (templateStyle === "elegant") {
+      return (
+        <div className={`w-full max-w-2xl bg-amber-50/20 text-stone-800 rounded-3xl shadow-xl border border-stone-200 p-12 space-y-6 min-h-[842px] print:rounded-none print:shadow-none print:border-none print:max-w-none print:w-full print:h-full print:min-h-0 print:m-0 ${fontClass}`}>
+          {/* Header */}
+          <div className="text-center border-b border-stone-300 pb-6 space-y-2">
+            <h1 className="text-4xl font-normal text-stone-900 tracking-wider">
+              {renderEditable("personalInfo.fullName", personalInfo?.fullName, "text-4xl font-normal text-stone-900")}
+            </h1>
+            <p className="font-medium text-xs uppercase tracking-widest text-stone-500">
+              {renderEditable("experience[0].position", experience?.[0]?.position, "", "Full Stack Developer")}
+            </p>
+            <div className="flex justify-center gap-6 text-xs text-stone-500 font-medium flex-wrap mt-2">
+              {personalInfo?.email && <span>{renderEditable("personalInfo.email", personalInfo.email)}</span>}
+              {personalInfo?.phone && <span>{renderEditable("personalInfo.phone", personalInfo.phone)}</span>}
+              {personalInfo?.location && <span>{renderEditable("personalInfo.location", personalInfo.location)}</span>}
+            </div>
+          </div>
+          {/* Summary */}
+          {personalInfo?.summary && (
+            <div className="space-y-3">
+              <h4 className="text-[10px] font-normal uppercase tracking-[0.2em] text-center text-stone-800">Professional Summary</h4>
+              <p className="text-stone-600 text-xs sm:text-sm leading-relaxed text-center italic">
+                {renderEditable("personalInfo.summary", personalInfo.summary, "w-full block text-center")}
+              </p>
+            </div>
+          )}
+          {/* Experience */}
+          {experience?.length > 0 && (
+            <div className="space-y-5 pt-2">
+              <h4 className="text-[10px] font-normal uppercase tracking-[0.2em] text-center text-stone-800 border-b border-stone-200 pb-2">Professional History</h4>
+              <div className="space-y-5">
+                {experience.map((exp, idx) => (
+                  <div key={idx} className="space-y-1">
+                    <div className="flex justify-between font-normal text-stone-900 text-xs sm:text-sm">
+                      <span>
+                        <span className="font-semibold">{renderEditable(`experience[${idx}].position`, exp.position)}</span>, {renderEditable(`experience[${idx}].company`, exp.company)}
+                      </span>
+                      <span className="text-stone-400 font-medium text-[10px] sm:text-xs italic">
+                        {exp.startDate ? exp.startDate.substring(0, 7) : ""} - {exp.currentlyWorking ? "Present" : exp.endDate ? exp.endDate.substring(0, 7) : ""}
+                      </span>
+                    </div>
+                    <ul className="list-disc list-inside text-stone-600 text-xs leading-relaxed space-y-0.5 pl-1">
+                      {exp.description?.map((bullet, bIdx) => (
+                        <li key={bIdx} className="list-item text-left">
+                          {renderEditable(`experience_bullet[${idx}][${bIdx}]`, bullet, "inline-block text-xs")}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {/* Education */}
+          {education?.length > 0 && (
+            <div className="space-y-4 pt-2">
+              <h4 className="text-[10px] font-normal uppercase tracking-[0.2em] text-center text-stone-800 border-b border-stone-200 pb-2">Education</h4>
+              <div className="space-y-3">
+                {education.map((edu, idx) => (
+                  <div key={idx} className="flex justify-between items-start text-xs sm:text-sm">
+                    <div>
+                      <span className="font-semibold text-stone-900">
+                        {renderEditable(`education[${idx}].degree`, edu.degree)} in {renderEditable(`education[${idx}].fieldOfStudy`, edu.fieldOfStudy)}
+                      </span>
+                      <p className="text-xs text-stone-500 mt-0.5">
+                        {renderEditable(`education[${idx}].school`, edu.school)}
+                      </p>
+                    </div>
+                    <span className="text-stone-400 text-xs italic">
+                      {edu.startDate ? edu.startDate.substring(0, 4) : ""} - {edu.endDate ? edu.endDate.substring(0, 4) : ""}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {/* Skills */}
+          {skills?.length > 0 && (
+            <div className="space-y-3 pt-2">
+              <h4 className="text-[10px] font-normal uppercase tracking-[0.2em] text-center text-stone-800 border-b border-stone-200 pb-2">Key Skills</h4>
+              <div className="text-xs text-stone-600 text-center font-medium leading-loose">
+                {renderEditable("skills", skills.join("  |  "), "w-full block text-center")}
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
     // 4. Modern Template (Default classic/modern split grid structure)
     return (
-      <div className={`w-full max-w-2xl bg-white rounded-3xl shadow-xl border border-slate-100/50 p-10 space-y-6 min-h-[842px] ${fontClass}`}>
+      <div className={`w-full max-w-2xl bg-white rounded-3xl shadow-xl border border-slate-100/50 p-10 space-y-6 min-h-[842px] print:rounded-none print:shadow-none print:border-none print:max-w-none print:w-full print:h-full print:min-h-0 print:m-0 ${fontClass}`}>
         {/* Header info */}
         <div className="border-b border-slate-100 pb-5">
           <h1 className="text-2xl font-black text-slate-900 leading-none">
             {renderEditable("personalInfo.fullName", personalInfo?.fullName, "text-2xl font-black text-slate-900")}
           </h1>
           <p className={`font-bold text-sm mt-1.5 capitalize ${getColorClass("text")}`}>
-            {experience?.[0] ? renderEditable("experience[0].position", experience[0].position, "font-bold text-sm") : "Full Stack Developer"}
+            {renderEditable("experience[0].position", experience?.[0]?.position, "font-bold text-sm", "Full Stack Developer")}
           </p>
           <div className="flex flex-wrap gap-x-3 text-[11px] text-slate-400 mt-2 font-medium">
             {personalInfo?.email && (
@@ -625,7 +939,7 @@ const ResumePreview = () => {
     <div className="flex flex-col min-h-screen bg-slate-50/30 text-left">
       
       {/* Top Header */}
-      <header className="sticky top-0 z-30 w-full border-b border-slate-100 bg-white px-4 py-3 flex items-center justify-between shadow-sm">
+      <header className="print:hidden sticky top-0 z-30 w-full border-b border-slate-100 bg-white px-4 py-3 flex items-center justify-between shadow-sm">
         <div className="flex items-center gap-3">
           <button
             onClick={() => navigate(`/builder/${id}`)}
@@ -649,15 +963,22 @@ const ResumePreview = () => {
       </header>
 
       {/* Main Workspace */}
-      <div className="flex flex-1 overflow-hidden h-[calc(100vh-3.75rem)]">
+      <div className="flex flex-1 overflow-hidden h-[calc(100vh-3.75rem)] print:h-auto print:overflow-visible">
         
         {/* Left Options Panel */}
-        <aside className="w-64 border-r border-slate-100 bg-white p-6 space-y-6 overflow-y-auto shrink-0 hidden md:block">
+        <aside className="print:hidden w-64 border-r border-slate-100 bg-white p-6 space-y-6 overflow-y-auto shrink-0 hidden md:block">
           {/* Template select */}
           <div className="space-y-2">
             <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Template Style</label>
+            <input 
+              type="text" 
+              placeholder="Search templates..."
+              value={templateSearch}
+              onChange={(e) => setTemplateSearch(e.target.value)}
+              className="w-full text-xs p-2 rounded-lg border border-slate-200 focus:outline-none focus:border-indigo-500 mb-2"
+            />
             <div className="grid grid-cols-2 gap-2">
-              {templates.map((t) => (
+              {templates.filter(t => t.includes(templateSearch.toLowerCase())).map((t) => (
                 <button
                   key={t}
                   onClick={() => changeResumeTemplate(id, t)}
@@ -708,8 +1029,10 @@ const ResumePreview = () => {
         </aside>
 
         {/* Center Panel: Full Page Mockup Preview */}
-        <main className="flex-1 overflow-y-auto p-8 bg-slate-100 flex justify-center">
-          {renderTemplate()}
+        <main className="flex-1 overflow-y-auto p-8 bg-slate-100 flex justify-center print:p-0 print:bg-white print:block print:overflow-visible">
+          <div className="print:shadow-none print:w-[210mm] print:h-[297mm] print:m-0 print:border-none">
+            {renderTemplate()}
+          </div>
         </main>
 
       </div>
