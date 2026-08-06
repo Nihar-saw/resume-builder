@@ -5,9 +5,11 @@ import Input from "../components/common/Input";
 import Button from "../components/common/Button";
 import { toast } from "react-hot-toast";
 import { useFormEntrance } from "../hooks/useGsapAnimations";
+import { FcGoogle } from "react-icons/fc";
+import { FaGithub } from "react-icons/fa";
 
 const Login = () => {
-  const { login } = useAuth();
+  const { login, loginWithGoogle, loginWithGitHub } = useAuth();
   const navigate = useNavigate();
   const formRef = useFormEntrance();
   const [formData, setFormData] = useState({
@@ -16,6 +18,7 @@ const Login = () => {
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [socialLoading, setSocialLoading] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -52,6 +55,22 @@ const Login = () => {
       navigate("/dashboard");
     } else {
       toast.error(result.message || "Invalid credentials");
+    }
+  };
+
+  const handleSocialLogin = async (provider) => {
+    setSocialLoading(provider);
+    try {
+      const loginFn = provider === "google" ? loginWithGoogle : loginWithGitHub;
+      const result = await loginFn();
+      if (result.success) {
+        toast.success("Welcome back!");
+        navigate("/dashboard");
+      } else {
+        toast.error(result.message || "Social login failed");
+      }
+    } finally {
+      setSocialLoading("");
     }
   };
 
@@ -126,16 +145,25 @@ const Login = () => {
       </div>
 
       {/* Social options */}
-      <div className="social-row grid grid-cols-3 gap-3">
-        {["Google", "LinkedIn", "GitHub"].map((provider) => (
-          <button
-            key={provider}
-            type="button"
-            className="flex items-center justify-center rounded-xl border-2 border-black bg-[#1f1f26] py-2.5 px-3 hover:bg-[#0ae448] hover:text-black shadow-[3px_3px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 transition-all text-xs font-black uppercase text-slate-200 cursor-pointer"
-          >
-            {provider}
-          </button>
-        ))}
+      <div className="social-row grid grid-cols-2 gap-3">
+        <button
+          type="button"
+          onClick={() => handleSocialLogin("google")}
+          disabled={!!socialLoading}
+          className="flex items-center justify-center gap-2 rounded-xl border-2 border-black bg-[#1f1f26] py-2.5 px-3 hover:bg-[#0ae448] hover:text-black shadow-[3px_3px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 transition-all text-xs font-black uppercase text-slate-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <FcGoogle className="text-lg" />
+          {socialLoading === "google" ? "Signing in..." : "Google"}
+        </button>
+        <button
+          type="button"
+          onClick={() => handleSocialLogin("github")}
+          disabled={!!socialLoading}
+          className="flex items-center justify-center gap-2 rounded-xl border-2 border-black bg-[#1f1f26] py-2.5 px-3 hover:bg-[#0ae448] hover:text-black shadow-[3px_3px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 transition-all text-xs font-black uppercase text-slate-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <FaGithub className="text-lg" />
+          {socialLoading === "github" ? "Signing in..." : "GitHub"}
+        </button>
       </div>
 
       <p className="text-center text-xs font-bold text-slate-400">

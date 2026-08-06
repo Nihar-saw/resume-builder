@@ -56,7 +56,6 @@ const Sidebar = () => {
 
   const handleLogout = async () => {
     await logout();
-    navigate("/");
   };
 
   return (

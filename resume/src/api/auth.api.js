@@ -10,6 +10,11 @@ export const loginUser = async (credentials) => {
   return response.data;
 };
 
+export const firebaseLoginUser = async (idToken) => {
+  const response = await API.post("/auth/firebase", { idToken });
+  return response.data;
+};
+
 export const logoutUser = async () => {
   const response = await API.post("/auth/logout");
   return response.data;
@@ -24,3 +29,4 @@ export const updateUserProfile = async (profileData) => {
   const response = await API.put("/auth/profile", profileData);
   return response.data;
 };
+

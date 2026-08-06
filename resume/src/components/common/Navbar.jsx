@@ -33,7 +33,6 @@ const Navbar = ({ isDashboard = false }) => {
 
   const handleLogout = async () => {
     await logout();
-    navigate("/");
   };
 
   return (
