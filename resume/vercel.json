@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://resume-builder-backend-4v4f.onrender.com/api/:path*"
+      "destination": "https://resume-builder-backend-jyn8.onrender.com/api/:path*"
     },
     {
       "source": "/(.*)",
