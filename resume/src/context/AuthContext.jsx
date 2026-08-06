@@ -2,7 +2,7 @@ import { createContext, useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider, githubProvider } from "../config/firebase";
-import { registerUser, loginUser, firebaseLoginUser, logoutUser, getMe } from "../api/auth.api";
+import { registerUser, loginUser, firebaseLoginUser, setPasswordAPI, logoutUser, getMe } from "../api/auth.api";
 
 export const AuthContext = createContext(null);
 
@@ -119,6 +119,25 @@ export const AuthProvider = ({ children }) => {
   const loginWithGoogle = () => firebaseSocialLogin(googleProvider);
   const loginWithGitHub = () => firebaseSocialLogin(githubProvider);
 
+  const setPassword = async (password) => {
+    setLoading(true);
+    try {
+      const data = await setPasswordAPI(password);
+      if (data.success) {
+        setUser(data.user);
+        return { success: true };
+      }
+      return { success: false, message: data.message || "Failed to set password." };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.response?.data?.message || "Set password failed.",
+      };
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const logout = async () => {
     setLoading(true);
     try {
@@ -143,6 +162,7 @@ export const AuthProvider = ({ children }) => {
         register,
         loginWithGoogle,
         loginWithGitHub,
+        setPassword,
         logout,
       }}
     >

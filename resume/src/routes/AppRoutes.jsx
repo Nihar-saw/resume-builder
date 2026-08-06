@@ -20,6 +20,7 @@ import AIAssistant from "../pages/AIAssistant";
 import ResumePreview from "../pages/ResumePreview";
 import Portfolio from "../pages/Portfolio";
 import Settings from "../pages/Settings";
+import SetPassword from "../pages/SetPassword";
 import NotFound from "../pages/NotFound";
 import PublicResume from "../pages/PublicResume";
 
@@ -42,8 +43,14 @@ const AppRoutes = () => {
         </Route>
       </Route>
 
-      {/* Private Dashboard Pages */}
+      {/* Private Pages */}
       <Route element={<PrivateRoute />}>
+        {/* Set Password for Google/GitHub registrations (Fullscreen Card style) */}
+        <Route element={<AuthLayout />}>
+          <Route path="/set-password" element={<SetPassword />} />
+        </Route>
+
+        {/* Dashboard Pages */}
         <Route element={<DashboardLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/resumes" element={<Resumes />} />

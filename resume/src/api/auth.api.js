@@ -30,3 +30,8 @@ export const updateUserProfile = async (profileData) => {
   return response.data;
 };
 
+export const setPasswordAPI = async (password) => {
+  const response = await API.post("/auth/set-password", { password });
+  return response.data;
+};
+
