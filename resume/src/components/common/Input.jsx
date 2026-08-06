@@ -11,11 +11,17 @@ const Input = ({
   ...props
 }) => {
   const isTextarea = type === "textarea";
-  
+
+  const baseInputStyle =
+    "w-full rounded-xl border-2.5 border-black bg-[#18181c] px-4 py-2.5 text-sm font-medium text-white placeholder:text-slate-500 shadow-[3px_3px_0px_0px_#000] focus:shadow-[5px_5px_0px_0px_#0ae448] focus:outline-none transition-all duration-150";
+
   return (
     <div className={`flex flex-col gap-1.5 w-full ${className}`}>
       {label && (
-        <label htmlFor={name} className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+        <label
+          htmlFor={name}
+          className="text-xs font-black uppercase tracking-wider text-slate-300"
+        >
           {label}
         </label>
       )}
@@ -27,7 +33,9 @@ const Input = ({
           placeholder={placeholder}
           value={value}
           onChange={onChange}
-          className={`w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2.5 text-base text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:outline-none transition-all duration-200 resize-y min-h-24 ${error ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""}`}
+          className={`${baseInputStyle} resize-y min-h-24 ${
+            error ? "border-red-500 focus:shadow-[5px_5px_0px_0px_#ef4444]" : ""
+          }`}
           {...props}
         />
       ) : (
@@ -38,11 +46,17 @@ const Input = ({
           placeholder={placeholder}
           value={value}
           onChange={onChange}
-           className={`w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2.5 text-base text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:outline-none transition-all duration-200 ${error ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""}`}
+          className={`${baseInputStyle} ${
+            error ? "border-red-500 focus:shadow-[5px_5px_0px_0px_#ef4444]" : ""
+          }`}
           {...props}
         />
       )}
-      {error && <span className="text-xs font-medium text-red-500">{error}</span>}
+      {error && (
+        <span className="text-xs font-extrabold text-red-400 bg-red-950/40 border border-red-500/50 px-2 py-0.5 rounded-md inline-block w-fit">
+          {error}
+        </span>
+      )}
     </div>
   );
 };

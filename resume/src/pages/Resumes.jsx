@@ -13,7 +13,6 @@ import {
   IoFilterOutline,
   IoShareSocialOutline,
 } from "react-icons/io5";
-import Card from "../components/common/Card";
 import Button from "../components/common/Button";
 import Loader from "../components/common/Loader";
 import EmptyState from "../components/common/EmptyState";
@@ -24,7 +23,7 @@ const Resumes = () => {
   const { resumes, fetchResumes, createNewResume, deleteResumeById, duplicateResumeById, loading } = useResume();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterSort, setFilterSort] = useState("newest"); // "newest", "oldest", "ats"
+  const [filterSort, setFilterSort] = useState("newest");
 
   useEffect(() => {
     fetchResumes();
@@ -99,27 +98,31 @@ const Resumes = () => {
 
   return (
     <div className="space-y-8 text-left">
-      {/* Header Banner */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-150 pb-6">
+      {/* ─── Header ─── */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b-3 border-black pb-6">
         <div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
-            My Resumes Library
-            <span className="inline-flex items-center gap-1 text-xs font-bold bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded-full border border-indigo-100">
-              <IoSparklesOutline className="h-3.5 w-3.5" /> {resumes.length} Saved
+          <h2
+            className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3 uppercase"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
+            My Resumes
+            <span className="neo-badge neo-badge-green text-[10px]">
+              <IoSparklesOutline className="h-3.5 w-3.5" />
+              {resumes.length} Saved
             </span>
           </h2>
-          <p className="mt-1 text-sm text-slate-500">
-            Browse, manage, duplicate, and build all your custom resumes in one central library.
+          <p className="mt-1 text-xs font-semibold text-slate-400 uppercase tracking-wide">
+            Browse, manage, duplicate, and build all your custom resumes.
           </p>
         </div>
-        <Button onClick={handleCreate} className="shadow-lg shadow-indigo-600/20 w-full sm:w-auto">
+        <Button onClick={handleCreate} variant="primary" size="md">
           <IoAddOutline className="mr-1.5 h-5 w-5" />
-          Create New Resume
+          Create Resume
         </Button>
       </div>
 
-      {/* Filter and Search Toolbar */}
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-white p-4 rounded-2xl border border-slate-150 shadow-sm">
+      {/* ─── Filter Toolbar ─── */}
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-[#16161a] border-3 border-black rounded-2xl shadow-[4px_4px_0px_0px_#000] p-4">
         {/* Search */}
         <div className="relative w-full sm:max-w-md">
           <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
@@ -130,18 +133,18 @@ const Resumes = () => {
             placeholder="Search resumes by title..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-10 pr-4 text-sm text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-indigo-500 focus:outline-none transition-all duration-200"
+            className="w-full rounded-xl border-2 border-black bg-[#1f1f26] py-2.5 pl-10 pr-4 text-sm font-medium text-white placeholder:text-slate-500 shadow-[2px_2px_0px_0px_#000] focus:shadow-[4px_4px_0px_0px_#0ae448] focus:outline-none transition-all"
           />
         </div>
 
-        {/* Sort dropdown */}
+        {/* Sort */}
         <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
-          <IoFilterOutline className="h-4 w-4 text-slate-500" />
-          <span className="text-xs font-semibold text-slate-500 shrink-0">Sort By:</span>
+          <IoFilterOutline className="h-4 w-4 text-slate-400" />
+          <span className="text-xs font-black text-slate-400 shrink-0 uppercase tracking-wide">Sort:</span>
           <select
             value={filterSort}
             onChange={(e) => setFilterSort(e.target.value)}
-            className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-bold text-slate-700 focus:outline-none"
+            className="rounded-xl border-2 border-black bg-[#1f1f26] px-3 py-2 text-xs font-black text-white shadow-[2px_2px_0px_0px_#000] focus:outline-none focus:shadow-[4px_4px_0px_0px_#0ae448] transition-all"
           >
             <option value="newest">Recently Updated</option>
             <option value="oldest">Oldest First</option>
@@ -150,7 +153,7 @@ const Resumes = () => {
         </div>
       </div>
 
-      {/* Resumes Grid */}
+      {/* ─── Resumes Grid ─── */}
       {loading && resumes.length === 0 ? (
         <div className="flex h-64 items-center justify-center">
           <Loader size="lg" />
@@ -165,30 +168,28 @@ const Resumes = () => {
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredResumes.map((resume) => (
-            <Card
+            <div
               key={resume._id}
               onClick={() => navigate(`/builder/${resume._id}`)}
-              className="flex flex-col justify-between p-6 hover:translate-y-[-4px] border border-slate-150 hover:border-indigo-200 hover:shadow-xl transition-all duration-300 group min-h-56 cursor-pointer space-y-4"
+              className="group rounded-2xl border-3 border-black bg-[#16161a] p-6 shadow-[5px_5px_0px_0px_#000] hover:shadow-[8px_8px_0px_0px_#0ae448] hover:-translate-x-0.5 hover:-translate-y-0.5 cursor-pointer flex flex-col justify-between min-h-56 space-y-4 transition-all duration-150"
             >
               <div className="space-y-4">
                 <div className="flex justify-between items-start gap-4">
-                  <div className="h-12 w-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold group-hover:scale-105 transition-transform">
+                  <div className="h-12 w-12 rounded-xl bg-[#0ae448] text-black border-2 border-black shadow-[3px_3px_0px_0px_#000] flex items-center justify-center group-hover:scale-110 transition-transform">
                     <IoDocumentTextOutline className="h-6 w-6" />
                   </div>
-
-                  {/* ATS score tag */}
-                  <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-150 rounded-full px-3 py-1 text-xs">
-                    <span className="font-bold text-slate-700">ATS {resume.atsScore || 0}%</span>
+                  <div className="flex items-center gap-1.5 rounded-xl border-2 border-black bg-[#1f1f26] px-3 py-1 shadow-[2px_2px_0px_0px_#000]">
                     <span
-                      className={`h-2 w-2 rounded-full ${
-                        resume.atsScore > 80 ? "bg-emerald-500" : resume.atsScore > 50 ? "bg-amber-500" : "bg-red-400"
+                      className={`h-2.5 w-2.5 rounded-full border-2 border-black ${
+                        resume.atsScore > 80 ? "bg-[#0ae448]" : resume.atsScore > 50 ? "bg-[#facc15]" : "bg-[#ff007a]"
                       }`}
                     />
+                    <span className="font-black text-white text-[10px] uppercase">ATS {resume.atsScore || 0}%</span>
                   </div>
                 </div>
 
                 <div>
-                  <h4 className="font-bold text-slate-900 group-hover:text-indigo-600 transition-colors text-base line-clamp-1">
+                  <h4 className="font-black text-white group-hover:text-[#0ae448] transition-colors text-base line-clamp-1 uppercase">
                     {resume.title}
                   </h4>
                   <p className="text-xs text-slate-400 font-medium mt-1">
@@ -198,16 +199,16 @@ const Resumes = () => {
               </div>
 
               {/* Action buttons */}
-              <div className="flex items-center justify-between border-t border-slate-100 pt-4">
+              <div className="flex items-center justify-between border-t-2 border-black pt-4">
                 <div className="flex items-center gap-1">
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       navigate(`/preview/${resume._id}`);
                     }}
-                    className="inline-flex items-center gap-1 text-xs font-bold text-slate-600 hover:text-indigo-600 bg-slate-50 hover:bg-indigo-50 px-2.5 py-1.5 rounded-lg transition-all"
+                    className="inline-flex items-center gap-1 text-[10px] font-black text-slate-200 border-2 border-black bg-[#1f1f26] hover:bg-[#facc15] hover:text-black px-2 py-1.5 rounded-lg shadow-[2px_2px_0px_0px_#000] transition-all uppercase"
                   >
-                    <IoEyeOutline className="h-4 w-4" />
+                    <IoEyeOutline className="h-3.5 w-3.5" />
                     Preview
                   </button>
                   <button
@@ -215,9 +216,9 @@ const Resumes = () => {
                       e.stopPropagation();
                       navigate(`/builder/${resume._id}`);
                     }}
-                    className="inline-flex items-center gap-1 text-xs font-bold text-indigo-600 hover:text-indigo-700 bg-indigo-50 px-2.5 py-1.5 rounded-lg transition-all"
+                    className="inline-flex items-center gap-1 text-[10px] font-black text-black border-2 border-black bg-[#0ae448] hover:bg-[#3dff6e] px-2 py-1.5 rounded-lg shadow-[2px_2px_0px_0px_#000] transition-all uppercase"
                   >
-                    <IoCreateOutline className="h-4 w-4" />
+                    <IoCreateOutline className="h-3.5 w-3.5" />
                     Edit
                   </button>
                 </div>
@@ -225,28 +226,28 @@ const Resumes = () => {
                 <div className="flex items-center gap-1">
                   <button
                     onClick={(e) => handleShare(resume._id, e)}
-                    className="p-1.5 text-slate-400 hover:bg-emerald-50 hover:text-emerald-600 rounded-lg transition-colors"
+                    className="p-1.5 rounded-lg border-2 border-black bg-[#1f1f26] text-slate-300 hover:bg-[#38bdf8] hover:text-black shadow-[2px_2px_0px_0px_#000] transition-all"
                     title="Share Link"
                   >
-                    <IoShareSocialOutline className="h-4.5 w-4.5" />
+                    <IoShareSocialOutline className="h-3.5 w-3.5" />
                   </button>
                   <button
                     onClick={(e) => handleDuplicate(resume._id, e)}
-                    className="p-1.5 text-slate-400 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors"
+                    className="p-1.5 rounded-lg border-2 border-black bg-[#1f1f26] text-slate-300 hover:bg-[#facc15] hover:text-black shadow-[2px_2px_0px_0px_#000] transition-all"
                     title="Duplicate"
                   >
-                    <IoCopyOutline className="h-4.5 w-4.5" />
+                    <IoCopyOutline className="h-3.5 w-3.5" />
                   </button>
                   <button
                     onClick={(e) => handleDelete(resume._id, e)}
-                    className="p-1.5 text-slate-400 hover:bg-rose-50 hover:text-rose-600 rounded-lg transition-colors"
+                    className="p-1.5 rounded-lg border-2 border-black bg-[#1f1f26] text-slate-300 hover:bg-red-500 hover:text-white shadow-[2px_2px_0px_0px_#000] transition-all"
                     title="Delete"
                   >
-                    <IoTrashOutline className="h-4.5 w-4.5" />
+                    <IoTrashOutline className="h-3.5 w-3.5" />
                   </button>
                 </div>
               </div>
-            </Card>
+            </div>
           ))}
         </div>
       )}

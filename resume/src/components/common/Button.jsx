@@ -11,20 +11,23 @@ const Button = ({
   onClick,
   ...props
 }) => {
-  const baseStyle = "inline-flex items-center justify-center font-medium rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed active:scale-97";
+  const baseStyle =
+    "inline-flex items-center justify-center font-extrabold border-2.5 border-black rounded-xl neo-btn cursor-pointer select-none disabled:opacity-50 disabled:cursor-not-allowed";
 
   const variants = {
-    primary: "bg-indigo-600 hover:bg-indigo-700 text-white shadow-premium dark:shadow-none hover:shadow-indigo-500/20 focus:ring-indigo-500",
-    secondary: "bg-violet-600 hover:bg-violet-700 text-white shadow-premium dark:shadow-none hover:shadow-violet-500/20 focus:ring-violet-500",
-    outline: "border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 focus:ring-slate-400 dark:focus:ring-slate-500",
-    danger: "bg-red-600 hover:bg-red-700 text-white focus:ring-red-500",
-    ghost: "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white focus:ring-slate-200 dark:focus:ring-slate-700",
+    primary: "bg-[#0ae448] text-black hover:bg-[#3dff6e]",
+    secondary: "bg-[#facc15] text-black hover:bg-[#fde047]",
+    pink: "bg-[#ff007a] text-white hover:bg-[#ff3399]",
+    cyan: "bg-[#06b6d4] text-black hover:bg-[#22d3ee]",
+    outline: "bg-[#1c1c22] text-white hover:bg-[#282830] border-black",
+    danger: "bg-red-500 text-white hover:bg-red-600 border-black",
+    ghost: "bg-transparent text-slate-200 border-transparent shadow-none hover:bg-white/10 hover:border-black hover:shadow-[3px_3px_0px_0px_#000]",
   };
 
   const sizes = {
-    sm: "px-3 py-1.5 text-sm",
-    md: "px-4 py-2.5 text-base",
-    lg: "px-6 py-3.5 text-lg",
+    sm: "px-3.5 py-1.5 text-xs tracking-wide uppercase",
+    md: "px-5 py-2.5 text-sm tracking-wide",
+    lg: "px-7 py-3.5 text-base tracking-wide",
   };
 
   return (
@@ -32,10 +35,18 @@ const Button = ({
       type={type}
       disabled={disabled || loading}
       onClick={onClick}
-      className={`${baseStyle} ${variants[variant] || variants.primary} ${sizes[size] || sizes.md} ${className}`}
+      className={`${baseStyle} ${variants[variant] || variants.primary} ${
+        sizes[size] || sizes.md
+      } ${className}`}
       {...props}
     >
-      {loading && <Loader size="sm" color={variant === "outline" || variant === "ghost" ? "primary" : "white"} className="mr-2" />}
+      {loading && (
+        <Loader
+          size="sm"
+          color={variant === "primary" || variant === "secondary" ? "dark" : "white"}
+          className="mr-2"
+        />
+      )}
       {children}
     </button>
   );

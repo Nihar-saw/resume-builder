@@ -60,24 +60,24 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className="sticky top-16 hidden h-[calc(100vh-4rem)] w-64 border-r border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 md:flex flex-col justify-between">
+    <aside className="sticky top-16 hidden h-[calc(100vh-4rem)] w-64 border-r-3 border-black bg-[#0e0e10] p-4 md:flex flex-col justify-between shadow-[4px_0px_0px_0px_#000]">
       {/* Upper links */}
-      <div className="space-y-1">
+      <div className="space-y-2">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = location.pathname === item.path;
-          
+
           return (
             <NavLink
               key={item.label}
               to={item.path}
-              className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 ${
+              className={`flex items-center gap-3 rounded-xl px-4 py-3 text-xs font-black uppercase tracking-wider transition-all duration-150 border-2 ${
                 isActive
-                  ? "bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 shadow-sm"
-                  : "text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-slate-200"
+                  ? "bg-[#0ae448] text-black border-black shadow-[4px_4px_0px_0px_#000] translate-x-1"
+                  : "bg-[#16161a] text-slate-300 border-black shadow-[2px_2px_0px_0px_#000] hover:bg-[#202028] hover:text-white hover:shadow-[4px_4px_0px_0px_#000]"
               }`}
             >
-              <Icon className="h-5 w-5" />
+              <Icon className="h-4 w-4" />
               {item.label}
             </NavLink>
           );
@@ -88,9 +88,9 @@ const Sidebar = () => {
       <div>
         <button
           onClick={handleLogout}
-          className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200"
+          className="flex w-full items-center gap-3 rounded-xl border-2 border-black bg-red-600 px-4 py-3 text-xs font-black uppercase tracking-wider text-white shadow-[3px_3px_0px_0px_#000] hover:bg-red-700 hover:shadow-[5px_5px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 transition-all"
         >
-          <IoLogOutOutline className="h-5 w-5" />
+          <IoLogOutOutline className="h-4 w-4" />
           Log Out
         </button>
       </div>
