@@ -20,7 +20,7 @@ const Input = ({
       {label && (
         <label
           htmlFor={name}
-          className="text-xs font-black uppercase tracking-wider text-slate-300"
+          className="text-xs font-black uppercase tracking-wider text-slate-200"
         >
           {label}
         </label>

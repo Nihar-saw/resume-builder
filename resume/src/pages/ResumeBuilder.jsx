@@ -358,14 +358,14 @@ const ResumeBuilder = () => {
   ];
 
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50/30">
+    <div className="flex flex-col min-h-screen bg-[#0e0e10]">
       
       {/* Top Header */}
-      <header className="sticky top-0 z-30 w-full border-b border-slate-100 bg-white px-4 py-3 flex items-center justify-between shadow-sm">
+      <header className="sticky top-0 z-30 w-full border-b-2 border-black bg-[#16161a] px-4 py-3 flex items-center justify-between shadow-[0_3px_0px_0px_#000]">
         <div className="flex items-center gap-3">
           <button
             onClick={() => navigate("/dashboard")}
-            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-50 hover:text-slate-800 transition-colors"
+            className="rounded-lg border-2 border-black p-1.5 text-slate-300 hover:bg-[#0ae448] hover:text-black shadow-[2px_2px_0px_0px_#000] transition-all active:translate-x-0.5 active:translate-y-0.5"
           >
             <IoChevronBackOutline className="h-5 w-5" />
           </button>
@@ -374,18 +374,18 @@ const ResumeBuilder = () => {
             type="text"
             value={currentResume?.title || ""}
             onChange={handleTitleChange}
-            className="text-base font-bold text-slate-800 bg-transparent border-b border-transparent hover:border-slate-200 focus:border-indigo-500 focus:outline-none px-1 transition-all w-48 sm:w-60"
+            className="text-base font-black text-white bg-transparent border-b-2 border-transparent hover:border-black focus:border-[#0ae448] focus:outline-none px-1 transition-all w-48 sm:w-60 uppercase"
           />
           
-          <span className="flex items-center gap-1.5 text-[10px] sm:text-xs font-bold text-slate-400 bg-slate-50 px-2 py-0.5 rounded-full shrink-0">
+          <span className="flex items-center gap-1.5 text-[10px] font-black text-slate-300 bg-[#1f1f26] border-2 border-black px-2.5 py-1 rounded-xl shadow-[2px_2px_0px_0px_#000] shrink-0">
             {saving ? (
               <>
-                <IoSyncOutline className="h-3.5 w-3.5 animate-spin text-indigo-500" />
+                <IoSyncOutline className="h-3.5 w-3.5 animate-spin text-[#0ae448]" />
                 Saving...
               </>
             ) : (
               <>
-                <IoCloudDoneOutline className="h-3.5 w-3.5 text-indigo-600" />
+                <IoCloudDoneOutline className="h-3.5 w-3.5 text-[#0ae448]" />
                 Saved
               </>
             )}
@@ -413,19 +413,19 @@ const ResumeBuilder = () => {
       <div className="flex flex-1 overflow-hidden h-[calc(100vh-3.75rem)]">
         
         {/* Left SideNav */}
-        <aside className="w-16 sm:w-48 border-r border-slate-100 bg-white p-3 space-y-1 overflow-y-auto shrink-0">
+        <aside className="w-16 sm:w-48 border-r-2 border-black bg-[#16161a] p-3 space-y-2 overflow-y-auto shrink-0">
           {sections.map((section) => (
             <button
               key={section.id}
               onClick={() => setActiveSection(section.id)}
-              className={`flex items-center w-full rounded-xl py-3 px-3 sm:px-4 text-xs sm:text-sm font-bold text-left transition-all ${
+              className={`flex items-center w-full rounded-xl border-2 border-black py-2.5 px-3 sm:px-4 text-xs sm:text-sm font-black text-left transition-all shadow-[2px_2px_0px_0px_#000] ${
                 activeSection === section.id
-                  ? "bg-indigo-50 text-indigo-600"
-                  : "text-slate-500 hover:bg-slate-50 hover:text-slate-800"
+                  ? "bg-[#0ae448] text-black shadow-[4px_4px_0px_0px_#000]"
+                  : "bg-[#1f1f26] text-slate-300 hover:bg-[#2a2a33] hover:text-white"
               }`}
             >
               <span className="sm:hidden block mx-auto">{section.label.substring(0,2)}</span>
-              <span className="hidden sm:block">{section.label}</span>
+              <span className="hidden sm:block uppercase tracking-wide">{section.label}</span>
             </button>
           ))}
         </aside>
@@ -434,41 +434,40 @@ const ResumeBuilder = () => {
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 max-w-xl mx-auto w-full space-y-6">
           
           {/* AI Autofill Prompt Card */}
-          <Card className="text-left p-5 border border-indigo-100 bg-indigo-50/20 relative overflow-hidden">
-            <div className="absolute top-0 right-0 h-24 w-24 bg-indigo-500/5 rounded-full blur-xl" />
-            <h4 className="font-bold text-slate-800 text-sm flex items-center gap-1.5 mb-2">
+          <div className="text-left p-5 rounded-2xl border-3 border-black bg-[#16161a] shadow-[5px_5px_0px_0px_#000]">
+            <h4 className="font-black text-white text-sm uppercase flex items-center gap-2 mb-1.5" style={{ fontFamily: "var(--font-display)" }}>
               <span className="text-base">🤖</span>
               Autofill Resume with AI
             </h4>
-            <p className="text-[10px] text-slate-400 font-semibold mb-4 leading-relaxed">
+            <p className="text-xs font-semibold text-slate-400 mb-4 leading-relaxed">
               Enter a short prompt detailing your role, work history, or technologies. AI will populate summary bullets, key skills, and projects automatically.
             </p>
             <form onSubmit={handleAIGenerate} className="flex gap-2">
               <input
                 type="text"
-                placeholder="e.g. Senior Frontend Developer with 5 years React experience, worked at Stripe."
+                placeholder="e.g. Senior Frontend Developer with 5 years React experience."
                 value={aiPrompt}
                 onChange={(e) => setAiPrompt(e.target.value)}
-                className="flex-grow w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800 placeholder:text-slate-450 focus:border-indigo-500 focus:outline-none"
+                className="flex-grow w-full rounded-xl border-2 border-black bg-[#1f1f26] px-3.5 py-2.5 text-xs font-semibold text-white placeholder:text-slate-500 shadow-[2px_2px_0px_0px_#000] focus:shadow-[4px_4px_0px_0px_#0ae448] focus:outline-none transition-all"
               />
               <Button
                 type="submit"
                 variant="primary"
                 size="sm"
-                className="text-xs font-bold shrink-0 shadow-md shadow-indigo-600/10 px-4"
+                className="text-xs font-black shrink-0 px-4"
                 loading={generatingWithAI}
               >
                 Autofill
               </Button>
             </form>
-          </Card>
+          </div>
 
-          <Card className="text-left space-y-6">
+          <div className="text-left space-y-6 rounded-2xl border-3 border-black bg-[#16161a] p-6 shadow-[6px_6px_0px_0px_#000]">
             
             {/* 1. Personal Info Section */}
             {activeSection === "personal" && (
               <div className="space-y-4">
-                <h3 className="text-lg font-bold text-slate-800 border-b border-slate-50 pb-2">
+                <h3 className="text-base font-black text-white uppercase tracking-wide border-b-2 border-black pb-2" style={{ fontFamily: "var(--font-display)" }}>
                   Personal Information
                 </h3>
                 <Input
@@ -524,7 +523,7 @@ const ResumeBuilder = () => {
             {/* 2. Summary Section */}
             {activeSection === "summary" && (
               <div className="space-y-4">
-                <h3 className="text-lg font-bold text-slate-800 border-b border-slate-50 pb-2">
+                <h3 className="text-base font-black text-white uppercase tracking-wide border-b-2 border-black pb-2" style={{ fontFamily: "var(--font-display)" }}>
                   Professional Summary
                 </h3>
                 <Input
@@ -542,8 +541,8 @@ const ResumeBuilder = () => {
             {/* 3. Experience Section */}
             {activeSection === "experience" && (
               <div className="space-y-6">
-                <div className="flex justify-between items-center border-b border-slate-50 pb-2">
-                  <h3 className="text-lg font-bold text-slate-800">Work Experience</h3>
+                <div className="flex justify-between items-center border-b-2 border-black pb-2">
+                  <h3 className="text-base font-black text-white uppercase tracking-wide" style={{ fontFamily: "var(--font-display)" }}>Work Experience</h3>
                   <Button variant="outline" size="sm" onClick={addExperience} className="text-xs flex items-center gap-1 py-1.5 px-3">
                     <IoAddOutline className="h-4 w-4" />
                     Add Work
@@ -551,15 +550,15 @@ const ResumeBuilder = () => {
                 </div>
 
                 {(currentResume?.experience || []).map((exp, expIdx) => (
-                  <div key={expIdx} className="space-y-4 border border-slate-100 rounded-2xl p-4 bg-slate-50/30 relative">
+                  <div key={expIdx} className="space-y-4 border-2 border-black rounded-xl p-4 bg-[#1f1f26] relative shadow-[3px_3px_0px_0px_#000]">
                     <button
                       onClick={() => removeExperience(expIdx)}
-                      className="absolute top-4 right-4 p-1.5 text-slate-400 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors"
+                      className="absolute top-4 right-4 p-1.5 text-slate-400 hover:bg-red-500 hover:text-white rounded-lg border-2 border-black transition-colors"
                     >
                       <IoTrashOutline className="h-4.5 w-4.5" />
                     </button>
                     
-                    <h4 className="font-bold text-slate-700 text-sm">Experience #{expIdx + 1}</h4>
+                    <h4 className="font-black text-[#0ae448] text-xs uppercase">Experience #{expIdx + 1}</h4>
                     
                     <div className="grid sm:grid-cols-2 gap-4">
                       <Input
@@ -596,19 +595,19 @@ const ResumeBuilder = () => {
                       />
                     </div>
 
-                    <label className="flex items-center gap-2 text-xs font-semibold text-slate-600 cursor-pointer">
+                    <label className="flex items-center gap-2 text-xs font-black text-slate-300 cursor-pointer">
                       <input
                         type="checkbox"
                         checked={exp.currentlyWorking || false}
                         onChange={(e) => handleExperienceChange(expIdx, "currentlyWorking", e.target.checked)}
-                        className="rounded border-slate-350 text-indigo-650"
+                        className="rounded border-2 border-black accent-[#0ae448]"
                       />
                       Currently working here
                     </label>
 
                     {/* Bullet description list */}
                     <div className="space-y-2">
-                      <label className="text-xs font-semibold text-slate-700 block">Description Bullets</label>
+                      <label className="text-xs font-black text-slate-300 uppercase tracking-wider block">Description Bullets</label>
                       {(exp.description || []).map((bullet, bulletIdx) => (
                         <div key={bulletIdx} className="flex gap-2 items-center">
                           <input
@@ -616,7 +615,7 @@ const ResumeBuilder = () => {
                             value={bullet}
                             placeholder="Add bullet point description..."
                             onChange={(e) => handleExperienceBulletChange(expIdx, bulletIdx, e.target.value)}
-                            className="flex-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 focus:border-indigo-500 focus:outline-none"
+                            className="flex-1 w-full rounded-xl border-2 border-black bg-[#16161a] px-3 py-2 text-sm font-semibold text-white placeholder:text-slate-500 shadow-[2px_2px_0px_0px_#000] focus:shadow-[4px_4px_0px_0px_#0ae448] focus:outline-none transition-all"
                           />
                           <button
                             type="button"
@@ -639,8 +638,8 @@ const ResumeBuilder = () => {
             {/* 4. Education Section */}
             {activeSection === "education" && (
               <div className="space-y-6">
-                <div className="flex justify-between items-center border-b border-slate-50 pb-2">
-                  <h3 className="text-lg font-bold text-slate-800">Education Details</h3>
+                <div className="flex justify-between items-center border-b-2 border-black pb-2">
+                  <h3 className="text-base font-black text-white uppercase tracking-wide" style={{ fontFamily: "var(--font-display)" }}>Education Details</h3>
                   <Button variant="outline" size="sm" onClick={addEducation} className="text-xs flex items-center gap-1 py-1.5 px-3">
                     <IoAddOutline className="h-4 w-4" />
                     Add Education
@@ -648,15 +647,15 @@ const ResumeBuilder = () => {
                 </div>
 
                 {(currentResume?.education || []).map((edu, eduIdx) => (
-                  <div key={eduIdx} className="space-y-4 border border-slate-100 rounded-2xl p-4 bg-slate-50/30 relative">
+                  <div key={eduIdx} className="space-y-4 border-2 border-black rounded-xl p-4 bg-[#1f1f26] relative shadow-[3px_3px_0px_0px_#000]">
                     <button
                       onClick={() => removeEducation(eduIdx)}
-                      className="absolute top-4 right-4 p-1.5 text-slate-400 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors"
+                      className="absolute top-4 right-4 p-1.5 text-slate-400 hover:bg-red-500 hover:text-white rounded-lg border-2 border-black transition-colors"
                     >
                       <IoTrashOutline className="h-4.5 w-4.5" />
                     </button>
                     
-                    <h4 className="font-bold text-slate-700 text-sm">Education #{eduIdx + 1}</h4>
+                    <h4 className="font-black text-[#0ae448] text-xs uppercase">Education #{eduIdx + 1}</h4>
                     
                     <Input
                       label="School"
@@ -690,7 +689,7 @@ const ResumeBuilder = () => {
             {/* 5. Skills Section */}
             {activeSection === "skills" && (
               <div className="space-y-4">
-                <h3 className="text-lg font-bold text-slate-800 border-b border-slate-50 pb-2">
+                <h3 className="text-base font-black text-white uppercase tracking-wide border-b-2 border-black pb-2" style={{ fontFamily: "var(--font-display)" }}>
                   Key Skills
                 </h3>
                 <Input
@@ -708,8 +707,8 @@ const ResumeBuilder = () => {
             {/* 6. Projects Section */}
             {activeSection === "projects" && (
               <div className="space-y-6">
-                <div className="flex justify-between items-center border-b border-slate-50 pb-2">
-                  <h3 className="text-lg font-bold text-slate-800">Featured Projects</h3>
+                <div className="flex justify-between items-center border-b-2 border-black pb-2">
+                  <h3 className="text-base font-black text-white uppercase tracking-wide" style={{ fontFamily: "var(--font-display)" }}>Featured Projects</h3>
                   <Button variant="outline" size="sm" onClick={addProject} className="text-xs flex items-center gap-1 py-1.5 px-3">
                     <IoAddOutline className="h-4 w-4" />
                     Add Project
@@ -717,15 +716,15 @@ const ResumeBuilder = () => {
                 </div>
 
                 {(currentResume?.projects || []).map((proj, projIdx) => (
-                  <div key={projIdx} className="space-y-4 border border-slate-100 rounded-2xl p-4 bg-slate-50/30 relative">
+                  <div key={projIdx} className="space-y-4 border-2 border-black rounded-xl p-4 bg-[#1f1f26] relative shadow-[3px_3px_0px_0px_#000]">
                     <button
                       onClick={() => removeProject(projIdx)}
-                      className="absolute top-4 right-4 p-1.5 text-slate-400 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors"
+                      className="absolute top-4 right-4 p-1.5 text-slate-400 hover:bg-red-500 hover:text-white rounded-lg border-2 border-black transition-colors"
                     >
                       <IoTrashOutline className="h-4.5 w-4.5" />
                     </button>
                     
-                    <h4 className="font-bold text-slate-700 text-sm">Project #{projIdx + 1}</h4>
+                    <h4 className="font-black text-[#0ae448] text-xs uppercase">Project #{projIdx + 1}</h4>
                     
                     <Input
                       label="Project Title"
@@ -755,7 +754,7 @@ const ResumeBuilder = () => {
               </div>
             )}
 
-          </Card>
+          </div>
         </main>
 
         {/* Right Side: Live Resume Preview (as requested in the picture grid) */}

@@ -202,7 +202,7 @@ const ResumePreview = () => {
           {personalInfo?.summary && (
             <div className="space-y-2">
               <h4 className={`text-xs font-bold uppercase tracking-widest text-center border-b border-slate-100 pb-1 ${getColorClass("text")}`}>Professional Summary</h4>
-              <p className="text-slate-655 text-xs sm:text-sm leading-relaxed text-center">
+              <p className="text-slate-700 text-xs sm:text-sm leading-relaxed text-center">
                 {renderEditable("personalInfo.summary", personalInfo.summary, "w-full block text-center")}
               </p>
             </div>
@@ -270,7 +270,7 @@ const ResumePreview = () => {
                     <span className="font-bold text-slate-900 text-xs sm:text-sm">
                       {renderEditable(`projects[${idx}].title`, proj.title, "font-bold")}
                     </span>
-                    <p className="text-xs text-slate-605 leading-relaxed">
+                    <p className="text-xs text-slate-700 leading-relaxed">
                       {renderEditable(`projects[${idx}].description`, proj.description, "w-full block text-left")}
                     </p>
                     {proj.technologies?.length > 0 && (
@@ -426,8 +426,8 @@ const ResumePreview = () => {
             {/* Summary */}
             {personalInfo?.summary && (
               <div className="space-y-2">
-                <h4 className={`text-[10px] font-bold uppercase tracking-wider border-b border-slate-100 pb-1 ${getColorClass("text")}`}>Profile</h4>
-                <p className="text-slate-655 text-xs leading-relaxed">{personalInfo.summary}</p>
+                <h4 className={`text-[10px] font-bold uppercase tracking-wider border-b border-slate-200 pb-1 ${getColorClass("text")}`}>Profile</h4>
+                <p className="text-slate-700 text-xs leading-relaxed">{personalInfo.summary}</p>
               </div>
             )}
             {/* Experience */}
@@ -443,8 +443,8 @@ const ResumePreview = () => {
                           {exp.startDate ? exp.startDate.substring(0, 7) : ""} - {exp.currentlyWorking ? "Present" : exp.endDate ? exp.endDate.substring(0, 7) : ""}
                         </span>
                       </div>
-                      <p className="text-slate-450 font-bold text-[10px]">{exp.company}</p>
-                      <ul className="list-disc list-inside text-slate-500 text-[11px] leading-relaxed space-y-0.5">
+                      <p className="text-slate-600 font-bold text-[10px]">{exp.company}</p>
+                      <ul className="list-disc list-inside text-slate-700 text-[11px] leading-relaxed space-y-0.5">
                         {exp.description?.map((bullet, bIdx) => (
                           <li key={bIdx}>{bullet}</li>
                         ))}
@@ -498,22 +498,24 @@ const ResumePreview = () => {
         <div className={`w-full max-w-2xl bg-[#0D1117] text-emerald-400 rounded-3xl shadow-xl border border-emerald-500/30 p-10 space-y-6 min-h-[842px] print:bg-[#0D1117] print:rounded-none print:shadow-none print:border-none print:max-w-none print:w-full print:h-full print:min-h-0 print:m-0 ${fontClass}`}>
           {/* Header */}
           <div className="border-b-2 border-emerald-500/50 pb-5">
-            <h1 className="text-2xl font-bold tracking-wider">
-              &gt; {renderEditable("personalInfo.fullName", personalInfo?.fullName, "font-bold text-emerald-400")}
+            <h1 className="text-2xl font-bold tracking-wider flex items-center gap-2">
+              <span className="text-emerald-600 select-none">›</span>
+              {renderEditable("personalInfo.fullName", personalInfo?.fullName, "font-bold text-emerald-400")}
             </h1>
-            <p className="font-bold text-sm mt-1.5 capitalize text-emerald-500/80">
-              $ {renderEditable("experience[0].position", experience?.[0]?.position, "", "Full Stack Developer")}
+            <p className="font-bold text-sm mt-1.5 capitalize text-emerald-500/80 flex items-center gap-1.5">
+              <span className="text-emerald-700 font-mono text-xs select-none bg-emerald-900/30 px-1 rounded">role</span>
+              {renderEditable("experience[0].position", experience?.[0]?.position, "", "Full Stack Developer")}
             </p>
             <div className="flex gap-4 text-[10px] text-emerald-600/70 mt-2 font-mono flex-wrap">
-              {personalInfo?.email && <span>[Email: {renderEditable("personalInfo.email", personalInfo.email)}]</span>}
-              {personalInfo?.phone && <span>[Phone: {renderEditable("personalInfo.phone", personalInfo.phone)}]</span>}
-              {personalInfo?.location && <span>[Loc: {renderEditable("personalInfo.location", personalInfo.location)}]</span>}
+              {personalInfo?.email && <span>[email: {renderEditable("personalInfo.email", personalInfo.email)}]</span>}
+              {personalInfo?.phone && <span>[phone: {renderEditable("personalInfo.phone", personalInfo.phone)}]</span>}
+              {personalInfo?.location && <span>[loc: {renderEditable("personalInfo.location", personalInfo.location)}]</span>}
             </div>
           </div>
           {/* Summary */}
           {personalInfo?.summary && (
             <div className="space-y-2">
-              <h4 className="text-xs font-bold uppercase tracking-widest text-emerald-500/90">## Summary</h4>
+              <h4 className="text-xs font-bold uppercase tracking-widest text-emerald-500/90 flex items-center gap-1.5"><span className="text-emerald-700">#</span> Summary</h4>
               <p className="text-emerald-400/80 text-xs sm:text-sm leading-relaxed">
                 {renderEditable("personalInfo.summary", personalInfo.summary, "w-full block text-left")}
               </p>
@@ -522,7 +524,7 @@ const ResumePreview = () => {
           {/* Experience */}
           {experience?.length > 0 && (
             <div className="space-y-4">
-              <h4 className="text-xs font-bold uppercase tracking-widest text-emerald-500/90">## Experience</h4>
+              <h4 className="text-xs font-bold uppercase tracking-widest text-emerald-500/90 flex items-center gap-1.5"><span className="text-emerald-700">#</span> Experience</h4>
               <div className="space-y-4">
                 {experience.map((exp, idx) => (
                   <div key={idx} className="space-y-1">
@@ -534,10 +536,11 @@ const ResumePreview = () => {
                         {exp.startDate ? exp.startDate.substring(0, 7) : ""} : {exp.currentlyWorking ? "Present" : exp.endDate ? exp.endDate.substring(0, 7) : ""}
                       </span>
                     </div>
-                    <ul className="list-square list-inside text-emerald-400/80 text-[11px] leading-relaxed space-y-0.5 mt-1">
+                    <ul className="text-emerald-400/80 text-[11px] leading-relaxed space-y-0.5 mt-1 pl-2">
                       {exp.description?.map((bullet, bIdx) => (
-                        <li key={bIdx} className="list-item">
-                          &gt; {renderEditable(`experience_bullet[${idx}][${bIdx}]`, bullet, "inline-block text-[11px]")}
+                        <li key={bIdx} className="flex items-start gap-1.5">
+                          <span className="text-emerald-600 select-none mt-0.5">›</span>
+                          {renderEditable(`experience_bullet[${idx}][${bIdx}]`, bullet, "inline-block text-[11px] flex-1")}
                         </li>
                       ))}
                     </ul>
@@ -549,7 +552,7 @@ const ResumePreview = () => {
           {/* Education */}
           {education?.length > 0 && (
             <div className="space-y-4">
-              <h4 className="text-xs font-bold uppercase tracking-widest text-emerald-500/90">## Education</h4>
+              <h4 className="text-xs font-bold uppercase tracking-widest text-emerald-500/90 flex items-center gap-1.5"><span className="text-emerald-700">#</span> Education</h4>
               <div className="space-y-3">
                 {education.map((edu, idx) => (
                   <div key={idx} className="flex justify-between items-start text-xs sm:text-sm text-emerald-300">
@@ -569,7 +572,7 @@ const ResumePreview = () => {
           {/* Projects */}
           {projects?.length > 0 && (
             <div className="space-y-4">
-              <h4 className="text-xs font-bold uppercase tracking-widest text-emerald-500/90">## Projects</h4>
+              <h4 className="text-xs font-bold uppercase tracking-widest text-emerald-500/90 flex items-center gap-1.5"><span className="text-emerald-700">#</span> Projects</h4>
               <div className="space-y-3">
                 {projects.map((proj, idx) => (
                   <div key={idx} className="space-y-1 text-emerald-300">
@@ -592,7 +595,7 @@ const ResumePreview = () => {
           {/* Skills */}
           {skills?.length > 0 && (
             <div className="space-y-2">
-              <h4 className="text-xs font-bold uppercase tracking-widest text-emerald-500/90">## Skills</h4>
+              <h4 className="text-xs font-bold uppercase tracking-widest text-emerald-500/90 flex items-center gap-1.5"><span className="text-emerald-700">#</span> Skills</h4>
               <div className="text-xs sm:text-sm text-emerald-400/90">
                 {renderEditable("skills", skills.join(" | "), "w-full block text-left font-bold")}
               </div>
@@ -711,16 +714,16 @@ const ResumePreview = () => {
     // 7. Elegant Template
     if (templateStyle === "elegant") {
       return (
-        <div className={`w-full max-w-2xl bg-amber-50/20 text-stone-800 rounded-3xl shadow-xl border border-stone-200 p-12 space-y-6 min-h-[842px] print:rounded-none print:shadow-none print:border-none print:max-w-none print:w-full print:h-full print:min-h-0 print:m-0 ${fontClass}`}>
+        <div className={`w-full max-w-2xl bg-white text-stone-900 rounded-3xl shadow-xl border border-stone-200 p-12 space-y-6 min-h-[842px] print:rounded-none print:shadow-none print:border-none print:max-w-none print:w-full print:h-full print:min-h-0 print:m-0 ${fontClass}`}>
           {/* Header */}
-          <div className="text-center border-b border-stone-300 pb-6 space-y-2">
-            <h1 className="text-4xl font-normal text-stone-900 tracking-wider">
-              {renderEditable("personalInfo.fullName", personalInfo?.fullName, "text-4xl font-normal text-stone-900")}
+          <div className="text-center border-b-2 border-amber-800/20 pb-6 space-y-2">
+            <h1 className="text-4xl font-semibold text-stone-950 tracking-wider">
+              {renderEditable("personalInfo.fullName", personalInfo?.fullName, "text-4xl font-semibold text-stone-950")}
             </h1>
-            <p className="font-medium text-xs uppercase tracking-widest text-stone-500">
+            <p className="font-bold text-xs uppercase tracking-[0.25em] text-amber-900">
               {renderEditable("experience[0].position", experience?.[0]?.position, "", "Full Stack Developer")}
             </p>
-            <div className="flex justify-center gap-6 text-xs text-stone-500 font-medium flex-wrap mt-2">
+            <div className="flex justify-center gap-6 text-xs text-stone-700 font-semibold flex-wrap mt-2">
               {personalInfo?.email && <span>{renderEditable("personalInfo.email", personalInfo.email)}</span>}
               {personalInfo?.phone && <span>{renderEditable("personalInfo.phone", personalInfo.phone)}</span>}
               {personalInfo?.location && <span>{renderEditable("personalInfo.location", personalInfo.location)}</span>}
@@ -729,8 +732,8 @@ const ResumePreview = () => {
           {/* Summary */}
           {personalInfo?.summary && (
             <div className="space-y-3">
-              <h4 className="text-[10px] font-normal uppercase tracking-[0.2em] text-center text-stone-800">Professional Summary</h4>
-              <p className="text-stone-600 text-xs sm:text-sm leading-relaxed text-center italic">
+              <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-center text-amber-900 border-b border-stone-200 pb-1">Professional Summary</h4>
+              <p className="text-stone-800 text-xs sm:text-sm leading-relaxed text-center font-medium italic">
                 {renderEditable("personalInfo.summary", personalInfo.summary, "w-full block text-center")}
               </p>
             </div>
@@ -738,21 +741,21 @@ const ResumePreview = () => {
           {/* Experience */}
           {experience?.length > 0 && (
             <div className="space-y-5 pt-2">
-              <h4 className="text-[10px] font-normal uppercase tracking-[0.2em] text-center text-stone-800 border-b border-stone-200 pb-2">Professional History</h4>
+              <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-center text-amber-900 border-b border-stone-200 pb-1">Professional History</h4>
               <div className="space-y-5">
                 {experience.map((exp, idx) => (
                   <div key={idx} className="space-y-1">
-                    <div className="flex justify-between font-normal text-stone-900 text-xs sm:text-sm">
+                    <div className="flex justify-between font-bold text-stone-950 text-xs sm:text-sm">
                       <span>
-                        <span className="font-semibold">{renderEditable(`experience[${idx}].position`, exp.position)}</span>, {renderEditable(`experience[${idx}].company`, exp.company)}
+                        <span className="font-extrabold">{renderEditable(`experience[${idx}].position`, exp.position)}</span> — {renderEditable(`experience[${idx}].company`, exp.company)}
                       </span>
-                      <span className="text-stone-400 font-medium text-[10px] sm:text-xs italic">
+                      <span className="text-stone-600 font-semibold text-[10px] sm:text-xs italic">
                         {exp.startDate ? exp.startDate.substring(0, 7) : ""} - {exp.currentlyWorking ? "Present" : exp.endDate ? exp.endDate.substring(0, 7) : ""}
                       </span>
                     </div>
-                    <ul className="list-disc list-inside text-stone-600 text-xs leading-relaxed space-y-0.5 pl-1">
+                    <ul className="list-disc list-inside text-stone-800 text-xs leading-relaxed space-y-0.5 pl-1">
                       {exp.description?.map((bullet, bIdx) => (
-                        <li key={bIdx} className="list-item text-left">
+                        <li key={bIdx} className="list-item text-left font-medium">
                           {renderEditable(`experience_bullet[${idx}][${bIdx}]`, bullet, "inline-block text-xs")}
                         </li>
                       ))}
@@ -765,19 +768,19 @@ const ResumePreview = () => {
           {/* Education */}
           {education?.length > 0 && (
             <div className="space-y-4 pt-2">
-              <h4 className="text-[10px] font-normal uppercase tracking-[0.2em] text-center text-stone-800 border-b border-stone-200 pb-2">Education</h4>
+              <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-center text-amber-900 border-b border-stone-200 pb-1">Education</h4>
               <div className="space-y-3">
                 {education.map((edu, idx) => (
                   <div key={idx} className="flex justify-between items-start text-xs sm:text-sm">
                     <div>
-                      <span className="font-semibold text-stone-900">
+                      <span className="font-bold text-stone-950">
                         {renderEditable(`education[${idx}].degree`, edu.degree)} in {renderEditable(`education[${idx}].fieldOfStudy`, edu.fieldOfStudy)}
                       </span>
-                      <p className="text-xs text-stone-500 mt-0.5">
+                      <p className="text-xs text-stone-700 font-semibold mt-0.5">
                         {renderEditable(`education[${idx}].school`, edu.school)}
                       </p>
                     </div>
-                    <span className="text-stone-400 text-xs italic">
+                    <span className="text-stone-600 text-xs font-semibold italic">
                       {edu.startDate ? edu.startDate.substring(0, 4) : ""} - {edu.endDate ? edu.endDate.substring(0, 4) : ""}
                     </span>
                   </div>
@@ -788,8 +791,8 @@ const ResumePreview = () => {
           {/* Skills */}
           {skills?.length > 0 && (
             <div className="space-y-3 pt-2">
-              <h4 className="text-[10px] font-normal uppercase tracking-[0.2em] text-center text-stone-800 border-b border-stone-200 pb-2">Key Skills</h4>
-              <div className="text-xs text-stone-600 text-center font-medium leading-loose">
+              <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-center text-amber-900 border-b border-stone-200 pb-1">Key Skills</h4>
+              <div className="text-xs text-stone-900 text-center font-bold leading-loose">
                 {renderEditable("skills", skills.join("  |  "), "w-full block text-center")}
               </div>
             </div>
@@ -936,18 +939,18 @@ const ResumePreview = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50/30 text-left">
+    <div className="flex flex-col min-h-screen bg-[#0e0e10] text-left">
       
       {/* Top Header */}
-      <header className="print:hidden sticky top-0 z-30 w-full border-b border-slate-100 bg-white px-4 py-3 flex items-center justify-between shadow-sm">
+      <header className="print:hidden sticky top-0 z-30 w-full border-b-2 border-black bg-[#16161a] px-4 py-3 flex items-center justify-between shadow-[0_3px_0px_0px_#000]">
         <div className="flex items-center gap-3">
           <button
             onClick={() => navigate(`/builder/${id}`)}
-            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-50 hover:text-slate-800 transition-colors"
+            className="rounded-lg border-2 border-black p-1.5 text-slate-300 hover:bg-[#0ae448] hover:text-black shadow-[2px_2px_0px_0px_#000] transition-all active:translate-x-0.5 active:translate-y-0.5"
           >
             <IoChevronBackOutline className="h-5 w-5" />
           </button>
-          <span className="font-bold text-slate-900">{currentResume.title} — Preview</span>
+          <span className="font-black text-white uppercase tracking-wide text-sm">{currentResume.title} <span className="text-slate-500">— Preview</span></span>
         </div>
 
         <div className="flex items-center gap-2">
@@ -966,26 +969,26 @@ const ResumePreview = () => {
       <div className="flex flex-1 overflow-hidden h-[calc(100vh-3.75rem)] print:h-auto print:overflow-visible">
         
         {/* Left Options Panel */}
-        <aside className="print:hidden w-64 border-r border-slate-100 bg-white p-6 space-y-6 overflow-y-auto shrink-0 hidden md:block">
+        <aside className="print:hidden w-60 border-r-2 border-black bg-[#16161a] p-5 space-y-5 overflow-y-auto shrink-0 hidden md:block">
           {/* Template select */}
           <div className="space-y-2">
-            <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Template Style</label>
+            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Template Style</label>
             <input 
               type="text" 
               placeholder="Search templates..."
               value={templateSearch}
               onChange={(e) => setTemplateSearch(e.target.value)}
-              className="w-full text-xs p-2 rounded-lg border border-slate-200 focus:outline-none focus:border-indigo-500 mb-2"
+              className="w-full text-xs p-2 rounded-xl border-2 border-black bg-[#1f1f26] text-white placeholder:text-slate-600 shadow-[2px_2px_0px_0px_#000] focus:outline-none focus:shadow-[3px_3px_0px_0px_#0ae448] transition-all mb-2"
             />
             <div className="grid grid-cols-2 gap-2">
               {templates.filter(t => t.includes(templateSearch.toLowerCase())).map((t) => (
                 <button
                   key={t}
                   onClick={() => changeResumeTemplate(id, t)}
-                  className={`rounded-xl border p-2.5 text-xs font-bold text-center capitalize transition-all ${
+                  className={`rounded-xl border-2 border-black p-2 text-[10px] font-black text-center capitalize transition-all shadow-[2px_2px_0px_0px_#000] ${
                     currentResume.template === t
-                      ? "border-indigo-650 bg-indigo-50/50 text-indigo-650 shadow-sm"
-                      : "border-slate-205 hover:bg-slate-50 text-slate-650"
+                      ? "bg-[#0ae448] text-black shadow-[3px_3px_0px_0px_#000]"
+                      : "bg-[#1f1f26] text-white hover:bg-[#2a2a33]"
                   }`}
                 >
                   {t}
@@ -995,31 +998,31 @@ const ResumePreview = () => {
           </div>
 
           {/* Theme select */}
-          <div className="space-y-2">
-            <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Theme Color</label>
+          <div className="space-y-2 border-t-2 border-black pt-4">
+            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Theme Color</label>
             <div className="flex gap-2">
               {themeColors.map((color) => (
                 <button
                   key={color}
                   onClick={() => setThemeColor(color)}
-                  className={`h-7 w-7 rounded-full transition-all ring-offset-2 hover:scale-105 active:scale-95 ${
+                  className={`h-8 w-8 rounded-full border-2 border-black transition-all hover:scale-110 active:scale-95 shadow-[2px_2px_0px_0px_#000] ${
                     color === "indigo" ? "bg-indigo-600" :
                     color === "slate" ? "bg-slate-700" :
                     color === "violet" ? "bg-violet-600" :
                     color === "emerald" ? "bg-emerald-600" : "bg-rose-500"
-                  } ${themeColor === color ? "ring-2 ring-indigo-500" : ""}`}
+                  } ${themeColor === color ? "ring-2 ring-[#0ae448] ring-offset-2 ring-offset-[#16161a]" : ""}`}
                 />
               ))}
             </div>
           </div>
 
           {/* Font select */}
-          <div className="space-y-2">
-            <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Typography</label>
+          <div className="space-y-2 border-t-2 border-black pt-4">
+            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Typography</label>
             <select
               value={font}
               onChange={(e) => setFont(e.target.value)}
-              className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none"
+              className="w-full rounded-xl border-2 border-black bg-[#1f1f26] px-3 py-2 text-xs font-bold text-white shadow-[2px_2px_0px_0px_#000] focus:outline-none focus:shadow-[3px_3px_0px_0px_#0ae448] transition-all"
             >
               {fonts.map((f) => (
                 <option key={f} value={f}>{f === "sans" ? "Sans Serif (Inter)" : f === "serif" ? "Classical Serif" : "Developer Mono"}</option>
@@ -1029,7 +1032,7 @@ const ResumePreview = () => {
         </aside>
 
         {/* Center Panel: Full Page Mockup Preview */}
-        <main className="flex-1 overflow-y-auto p-8 bg-slate-100 flex justify-center print:p-0 print:bg-white print:block print:overflow-visible">
+        <main className="flex-1 overflow-y-auto p-8 bg-[#0a0a0c] flex justify-center print:p-0 print:bg-white print:block print:overflow-visible">
           <div className="print:shadow-none print:w-[210mm] print:h-[297mm] print:m-0 print:border-none">
             {renderTemplate()}
           </div>

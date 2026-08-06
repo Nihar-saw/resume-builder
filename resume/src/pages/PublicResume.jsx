@@ -506,7 +506,7 @@ const EditorialTheme = ({
         {experience?.length > 0 && (
           <div className="space-y-8 font-sans">
             {experience.map((exp, idx) => (
-              <div key={idx} className="grid md:grid-cols-12 gap-4 pb-6 border-b border-stone-100">
+              <div key={idx} className="grid md:grid-cols-12 gap-4 pb-6 border-b border-stone-100 hover:border-amber-900/30 hover:pl-2 transition-all duration-200">
                 <div className="md:col-span-3 text-xs text-amber-900 font-bold tracking-wider">
                   {exp.startDate ? new Date(exp.startDate).getFullYear() : ""} — {exp.currentlyWorking ? "Present" : exp.endDate ? new Date(exp.endDate).getFullYear() : ""}
                 </div>
@@ -514,7 +514,7 @@ const EditorialTheme = ({
                   <h4 className="font-bold text-stone-900 font-serif text-lg">{exp.position}</h4>
                   <p className="text-xs text-stone-500 font-semibold">{exp.company} • {exp.location}</p>
                   {exp.description?.map((b, bIdx) => (
-                    <p key={bIdx} className="text-xs text-stone-600 leading-relaxed pt-1">{b}</p>
+                    <p key={bIdx} className="text-xs text-stone-600 leading-relaxed pt-1">• {b}</p>
                   ))}
                 </div>
               </div>
@@ -529,7 +529,7 @@ const EditorialTheme = ({
         <h2 className="text-2xl font-serif italic text-[#0c0a09] border-b border-amber-900/10 pb-4">Selected Works</h2>
         <div className="grid md:grid-cols-2 gap-8 font-sans">
           {projects.map((proj, idx) => (
-            <div key={idx} className="bg-white border border-stone-200 p-6 space-y-3 shadow-sm">
+            <div key={idx} className="bg-white border border-stone-200 p-6 space-y-3 shadow-sm hover:shadow-xl hover:border-amber-900/40 hover:-translate-y-1 transition-all duration-200">
               <h4 className="font-serif italic text-lg text-stone-900">{proj.title}</h4>
               <p className="text-xs text-stone-600 leading-relaxed">{proj.description}</p>
             </div>
@@ -544,7 +544,7 @@ const EditorialTheme = ({
           <h2 className="text-xs uppercase tracking-[0.3em] text-amber-900 font-bold">Core Competencies</h2>
           <div className="flex flex-wrap justify-center gap-3">
             {skills.map((skill, idx) => (
-              <span key={idx} className="text-xs font-semibold text-stone-800 bg-[#faf8f5] border border-stone-300 px-4 py-2">
+              <span key={idx} className="text-xs font-semibold text-stone-800 bg-[#faf8f5] border border-stone-300 px-4 py-2 hover:bg-stone-900 hover:text-white hover:scale-105 transition-all cursor-default shadow-xs">
                 {skill}
               </span>
             ))}
@@ -628,56 +628,60 @@ const BrutalistTheme = ({
       </div>
     </section>
 
-    {/* About / Exp */}
-    <section ref={aboutRef} className="border-t-4 border-black bg-white py-16">
-      <div className="mx-auto max-w-5xl px-6 space-y-8 text-left">
-        <h2 className="text-3xl font-black uppercase tracking-tight bg-yellow-300 inline-block px-4 py-1 border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-          Experience & Study
-        </h2>
-        {experience?.length > 0 && (
+    {/* Experience */}
+    {experience?.length > 0 && (
+      <section ref={aboutRef} className="border-t-4 border-black py-16 bg-[#fef3c7]">
+        <div className="mx-auto max-w-5xl px-6 space-y-8 text-left">
+          <h2 className="text-3xl font-black uppercase bg-white inline-block px-4 py-1 border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+            Experience
+          </h2>
           <div className="grid md:grid-cols-2 gap-6">
             {experience.map((exp, idx) => (
-              <div key={idx} className="bg-sky-200 border-3 border-black p-5 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] space-y-2">
-                <span className="text-xs font-black bg-black text-white px-2 py-0.5">
+              <div key={idx} className="bg-white border-3 border-black p-5 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-1 hover:-translate-y-1 transition-all duration-150 space-y-3">
+                <span className="bg-yellow-300 font-black text-xs px-2.5 py-1 border border-black uppercase">
                   {exp.startDate ? new Date(exp.startDate).getFullYear() : ""} - {exp.currentlyWorking ? "Present" : exp.endDate ? new Date(exp.endDate).getFullYear() : ""}
                 </span>
-                <h4 className="font-black text-lg text-black uppercase">{exp.position}</h4>
+                <h4 className="font-black text-xl uppercase">{exp.position}</h4>
                 <p className="text-xs font-bold">{exp.company} • {exp.location}</p>
                 {exp.description?.map((b, bIdx) => (
-                  <p key={bIdx} className="text-xs font-semibold leading-snug">• {b}</p>
+                  <p key={bIdx} className="text-xs font-semibold leading-relaxed pt-1">• {b}</p>
                 ))}
               </div>
             ))}
           </div>
-        )}
-      </div>
-    </section>
+        </div>
+      </section>
+    )}
 
     {/* Projects */}
     {projects?.length > 0 && (
-      <section ref={projectsRef} className="py-16 mx-auto max-w-5xl px-6 space-y-8 text-left">
-        <h2 className="text-3xl font-black uppercase bg-pink-400 inline-block px-4 py-1 border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-          Featured Builds
-        </h2>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((proj, idx) => (
-            <div key={idx} className="bg-white border-3 border-black p-5 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-3">
-              <h4 className="font-black text-lg uppercase">{proj.title}</h4>
-              <p className="text-xs font-semibold leading-relaxed">{proj.description}</p>
-            </div>
-          ))}
+      <section ref={projectsRef} className="border-t-4 border-black py-16 bg-white">
+        <div className="mx-auto max-w-5xl px-6 space-y-8 text-left">
+          <h2 className="text-3xl font-black uppercase bg-yellow-300 inline-block px-4 py-1 border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+            Builds & Works
+          </h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            {projects.map((proj, idx) => (
+              <div key={idx} className="bg-white border-3 border-black p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-1 hover:-translate-y-1 transition-all duration-150 space-y-3">
+                <h4 className="font-black text-xl uppercase">{proj.title}</h4>
+                <p className="text-xs font-semibold leading-relaxed">{proj.description}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     )}
 
     {/* Skills */}
     {skills?.length > 0 && (
-      <section ref={skillsRef} className="bg-violet-300 border-y-4 border-black py-12 text-left">
-        <div className="mx-auto max-w-5xl px-6 space-y-4">
-          <h2 className="text-2xl font-black uppercase">Skills & Tools</h2>
-          <div className="flex flex-wrap gap-2">
+      <section ref={skillsRef} className="border-t-4 border-black py-16 bg-[#fef3c7]">
+        <div className="mx-auto max-w-5xl px-6 space-y-6 text-left">
+          <h2 className="text-3xl font-black uppercase bg-white inline-block px-4 py-1 border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+            Skill Inventory
+          </h2>
+          <div className="flex flex-wrap gap-3">
             {skills.map((skill, idx) => (
-              <span key={idx} className="bg-white border-2 border-black font-black text-xs px-3 py-1.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+              <span key={idx} className="bg-white border-2 border-black font-black text-xs px-4 py-2 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all cursor-default">
                 {skill}
               </span>
             ))}
@@ -921,9 +925,9 @@ const SwissTheme = ({
         <h2 className="text-xs font-black uppercase tracking-widest text-slate-400">03 / Works</h2>
         <div className="grid md:grid-cols-2 gap-8">
           {projects.map((proj, idx) => (
-            <div key={idx} className="border-2 border-slate-950 p-6 space-y-3">
-              <h4 className="text-xl font-black uppercase">{proj.title}</h4>
-              <p className="text-xs text-slate-600 leading-relaxed">{proj.description}</p>
+            <div key={idx} className="border-2 border-slate-950 p-6 space-y-3 hover:bg-slate-950 hover:text-white transition-all duration-200 group">
+              <h4 className="text-xl font-black uppercase group-hover:text-blue-400 transition-colors">{proj.title}</h4>
+              <p className="text-xs text-slate-600 group-hover:text-slate-300 leading-relaxed transition-colors">{proj.description}</p>
             </div>
           ))}
         </div>
@@ -936,7 +940,7 @@ const SwissTheme = ({
         <h2 className="text-xs font-black uppercase tracking-widest text-slate-400">04 / Capabilities</h2>
         <div className="flex flex-wrap gap-3">
           {skills.map((skill, idx) => (
-            <span key={idx} className="border border-slate-950 font-extrabold text-xs px-4 py-2 uppercase">
+            <span key={idx} className="border-2 border-slate-950 font-black text-xs px-4 py-2 uppercase hover:bg-blue-600 hover:text-white hover:border-blue-600 hover:scale-105 transition-all cursor-default shadow-sm">
               {skill}
             </span>
           ))}
@@ -980,36 +984,83 @@ const SunsetTheme = ({
   contactRef,
   handleContactSubmit,
 }) => (
-  <div className="bg-slate-950 text-white font-sans antialiased min-h-screen">
+  <div className="bg-[#090a0f] text-white font-sans antialiased min-h-screen selection:bg-rose-500 selection:text-white relative overflow-hidden">
+    {/* Background Glow Orbs */}
+    <div className="absolute top-0 left-1/4 h-[500px] w-[500px] bg-gradient-to-tr from-amber-500/20 via-rose-500/20 to-purple-600/20 blur-[120px] rounded-full pointer-events-none" />
+    <div className="absolute top-1/2 right-10 h-[400px] w-[400px] bg-gradient-to-br from-violet-600/20 to-pink-500/20 blur-[100px] rounded-full pointer-events-none" />
+
+    {/* Sticky Glass Navbar */}
+    <header className="sticky top-0 z-50 bg-[#090a0f]/80 backdrop-blur-xl border-b border-white/10 shadow-2xl">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
+        <span className="font-black text-lg bg-gradient-to-r from-amber-400 via-rose-400 to-violet-400 bg-clip-text text-transparent uppercase tracking-wider">
+          {fullName}
+        </span>
+        <nav className="hidden md:flex gap-6 text-xs font-black uppercase tracking-wider text-slate-300">
+          <button onClick={() => scrollToSection(homeRef)} className="hover:text-rose-400 transition-colors">Home</button>
+          <button onClick={() => scrollToSection(aboutRef)} className="hover:text-rose-400 transition-colors">Experience</button>
+          {projects?.length > 0 && <button onClick={() => scrollToSection(projectsRef)} className="hover:text-[#0ae448] transition-colors">Projects</button>}
+          {skills?.length > 0 && <button onClick={() => scrollToSection(skillsRef)} className="hover:text-amber-400 transition-colors">Skills</button>}
+          <button onClick={() => scrollToSection(contactRef)} className="hover:text-violet-400 transition-colors">Contact</button>
+        </nav>
+      </div>
+    </header>
+
     {/* Gradient Hero Mesh Banner */}
-    <div className="relative bg-gradient-to-r from-amber-500 via-rose-500 to-violet-600 py-24 px-6 text-center shadow-2xl">
-      <div className="mx-auto max-w-4xl space-y-6">
-        <img src={avatarUrl} alt={fullName} className="h-32 w-32 rounded-full mx-auto border-4 border-white/40 shadow-2xl object-cover" />
-        <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-white">{fullName}</h1>
-        <p className="text-xl font-bold text-white/90 capitalize">{targetRole}</p>
-        <p className="text-sm sm:text-base text-white/80 max-w-2xl mx-auto leading-relaxed">{bio}</p>
-        <div className="pt-2 flex justify-center gap-4">
-          <button onClick={() => scrollToSection(contactRef)} className="bg-white text-slate-950 font-black text-xs px-6 py-3 rounded-full shadow-lg hover:bg-slate-100 transition-all">
+    <div ref={homeRef} className="relative py-28 px-6 text-center">
+      <div className="mx-auto max-w-4xl space-y-6 relative z-10">
+        <div className="relative inline-block group">
+          <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 via-rose-500 to-violet-600 rounded-full blur-md opacity-75 group-hover:opacity-100 transition duration-300" />
+          <img src={avatarUrl} alt={fullName} className="relative h-36 w-36 rounded-full mx-auto border-4 border-white/30 shadow-2xl object-cover" />
+        </div>
+        <h1 className="text-4xl sm:text-7xl font-black tracking-tight bg-gradient-to-r from-amber-300 via-rose-400 to-violet-400 bg-clip-text text-transparent leading-tight">
+          {fullName}
+        </h1>
+        <p className="text-xl sm:text-2xl font-black uppercase tracking-widest text-amber-300/90">{targetRole}</p>
+        <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed font-medium">{bio}</p>
+        
+        <div className="pt-4 flex justify-center gap-4 flex-wrap">
+          <button 
+            onClick={() => scrollToSection(contactRef)} 
+            className="bg-gradient-to-r from-amber-500 via-rose-500 to-violet-600 text-white font-black text-xs uppercase tracking-widest px-8 py-3.5 rounded-full shadow-lg shadow-rose-500/25 hover:shadow-rose-500/40 hover:scale-105 active:scale-95 transition-all"
+          >
             Get in Touch
           </button>
+          {personalInfo?.linkedin && (
+            <a 
+              href={personalInfo.linkedin.startsWith("http") ? personalInfo.linkedin : `https://${personalInfo.linkedin}`}
+              target="_blank"
+              rel="noreferrer"
+              className="bg-white/10 backdrop-blur-md text-white border border-white/20 font-black text-xs uppercase tracking-widest px-6 py-3.5 rounded-full hover:bg-white/20 hover:scale-105 transition-all"
+            >
+              LinkedIn
+            </a>
+          )}
         </div>
       </div>
     </div>
 
-    {/* Experience & Study */}
-    <section ref={aboutRef} className="py-20 mx-auto max-w-5xl px-6 space-y-12 text-left">
-      <h2 className="text-2xl font-black text-rose-400">Career & Background</h2>
+    {/* Experience */}
+    <section ref={aboutRef} className="py-20 mx-auto max-w-5xl px-6 space-y-12 text-left relative z-10">
+      <div className="border-b border-white/10 pb-4 flex items-center justify-between">
+        <h2 className="text-2xl font-black bg-gradient-to-r from-rose-400 to-amber-300 bg-clip-text text-transparent uppercase tracking-wider">
+          Career & Background
+        </h2>
+        <span className="neo-badge neo-badge-pink text-[10px]">Experience</span>
+      </div>
       {experience?.length > 0 && (
         <div className="grid md:grid-cols-2 gap-6">
           {experience.map((exp, idx) => (
-            <div key={idx} className="bg-slate-900/80 border border-slate-800 p-6 rounded-2xl space-y-2">
-              <span className="text-[10px] font-bold text-rose-400 bg-rose-950/60 px-2.5 py-0.5 rounded-full border border-rose-800/40">
+            <div 
+              key={idx} 
+              className="bg-[#12131c]/90 border border-white/10 p-6 rounded-2xl space-y-3 hover:border-rose-500/50 hover:shadow-[0_0_30px_rgba(244,63,94,0.15)] hover:-translate-y-1 transition-all duration-200 group"
+            >
+              <span className="text-[10px] font-black text-rose-300 bg-rose-500/10 border border-rose-500/30 px-3 py-1 rounded-full uppercase tracking-wider">
                 {exp.startDate ? new Date(exp.startDate).getFullYear() : ""} - {exp.currentlyWorking ? "Present" : exp.endDate ? new Date(exp.endDate).getFullYear() : ""}
               </span>
-              <h4 className="font-bold text-white text-lg">{exp.position}</h4>
-              <p className="text-xs text-slate-400">{exp.company} • {exp.location}</p>
+              <h4 className="font-black text-white text-lg group-hover:text-rose-400 transition-colors">{exp.position}</h4>
+              <p className="text-xs font-bold text-slate-400">{exp.company} • {exp.location}</p>
               {exp.description?.map((b, bIdx) => (
-                <p key={bIdx} className="text-xs text-slate-400 leading-relaxed">• {b}</p>
+                <p key={bIdx} className="text-xs text-slate-300 leading-relaxed font-medium pt-1">• {b}</p>
               ))}
             </div>
           ))}
@@ -1019,13 +1070,32 @@ const SunsetTheme = ({
 
     {/* Projects */}
     {projects?.length > 0 && (
-      <section ref={projectsRef} className="py-16 mx-auto max-w-5xl px-6 space-y-8 text-left">
-        <h2 className="text-2xl font-black text-amber-400">Featured Builds</h2>
+      <section ref={projectsRef} className="py-16 mx-auto max-w-5xl px-6 space-y-8 text-left relative z-10">
+        <div className="border-b border-white/10 pb-4 flex items-center justify-between">
+          <h2 className="text-2xl font-black bg-gradient-to-r from-amber-300 to-[#0ae448] bg-clip-text text-transparent uppercase tracking-wider">
+            Featured Builds
+          </h2>
+          <span className="neo-badge neo-badge-green text-[10px]">Portfolio</span>
+        </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((proj, idx) => (
-            <div key={idx} className="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-3 hover:border-rose-500/50 transition-all">
-              <h4 className="font-bold text-white text-base">{proj.title}</h4>
-              <p className="text-xs text-slate-400 leading-relaxed">{proj.description}</p>
+            <div 
+              key={idx} 
+              className="bg-[#12131c]/90 border border-white/10 p-6 rounded-2xl space-y-3 hover:border-[#0ae448]/50 hover:shadow-[0_0_30px_rgba(10,228,72,0.15)] hover:-translate-y-1 transition-all duration-200 group flex flex-col justify-between"
+            >
+              <div className="space-y-2">
+                <h4 className="font-black text-white text-base group-hover:text-[#0ae448] transition-colors">{proj.title}</h4>
+                <p className="text-xs text-slate-300 leading-relaxed font-medium">{proj.description}</p>
+              </div>
+              {proj.technologies?.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 pt-2">
+                  {proj.technologies.map((t, tIdx) => (
+                    <span key={tIdx} className="text-[9px] font-black text-[#0ae448] bg-[#0ae448]/10 border border-[#0ae448]/30 px-2 py-0.5 rounded-md">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -1034,13 +1104,18 @@ const SunsetTheme = ({
 
     {/* Skills */}
     {skills?.length > 0 && (
-      <section ref={skillsRef} className="bg-slate-900/60 border-y border-slate-800 py-16 text-left">
+      <section ref={skillsRef} className="bg-[#12131c]/60 border-y border-white/10 py-16 text-left relative z-10">
         <div className="mx-auto max-w-5xl px-6 space-y-6">
-          <h2 className="text-2xl font-black text-violet-400">Technical Skills</h2>
-          <div className="flex flex-wrap gap-2.5">
+          <h2 className="text-2xl font-black bg-gradient-to-r from-violet-400 to-rose-400 bg-clip-text text-transparent uppercase tracking-wider">
+            Technical Skills
+          </h2>
+          <div className="flex flex-wrap gap-3">
             {skills.map((skill, idx) => (
-              <span key={idx} className="bg-gradient-to-r from-amber-500/20 to-rose-500/20 text-rose-200 border border-rose-500/30 px-4 py-2 rounded-xl text-xs font-bold">
-                {skill}
+              <span 
+                key={idx} 
+                className="bg-gradient-to-r from-amber-500/10 via-rose-500/10 to-violet-500/10 hover:from-amber-500/30 hover:to-rose-500/30 text-white border border-white/20 hover:border-rose-400 px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider hover:scale-105 transition-all cursor-default shadow-md"
+              >
+                ⚡ {skill}
               </span>
             ))}
           </div>
@@ -1049,14 +1124,17 @@ const SunsetTheme = ({
     )}
 
     {/* Contact */}
-    <section ref={contactRef} className="py-20 mx-auto max-w-3xl px-6 text-left">
-      <div className="bg-slate-900 border border-slate-800 p-8 rounded-3xl space-y-6">
-        <h2 className="text-3xl font-black text-white">Let's Connect</h2>
+    <section ref={contactRef} className="py-20 mx-auto max-w-3xl px-6 text-left relative z-10">
+      <div className="bg-[#12131c] border border-white/10 p-8 rounded-3xl space-y-6 shadow-2xl">
+        <h2 className="text-3xl font-black text-white uppercase tracking-wider">Let's Connect</h2>
         <form onSubmit={handleContactSubmit} className="space-y-4">
-          <Input label="Name" name="name" placeholder="Name" required className="bg-slate-950 border-slate-800 text-white" />
-          <Input label="Email" name="email" type="email" placeholder="Email" required className="bg-slate-950 border-slate-800 text-white" />
-          <Input label="Message" name="message" type="textarea" placeholder="Message..." rows={4} required className="bg-slate-950 border-slate-800 text-white" />
-          <button type="submit" className="w-full bg-gradient-to-r from-amber-500 via-rose-500 to-violet-600 text-white font-bold py-3.5 rounded-xl shadow-xl hover:opacity-90 transition-all">
+          <Input label="Name" name="name" placeholder="Name" required className="bg-[#090a0f] border-white/10 text-white focus:border-rose-400" />
+          <Input label="Email" name="email" type="email" placeholder="Email" required className="bg-[#090a0f] border-white/10 text-white focus:border-rose-400" />
+          <Input label="Message" name="message" type="textarea" placeholder="Message..." rows={4} required className="bg-[#090a0f] border-white/10 text-white focus:border-rose-400" />
+          <button 
+            type="submit" 
+            className="w-full bg-gradient-to-r from-amber-500 via-rose-500 to-violet-600 text-white font-black text-xs uppercase tracking-widest py-4 rounded-xl shadow-xl shadow-rose-500/25 hover:shadow-rose-500/40 hover:scale-[1.01] active:scale-[0.99] transition-all"
+          >
             Send Message
           </button>
         </form>
