@@ -44,6 +44,20 @@ API.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
+    // Log detailed API failure info (Request URL, HTTP Status, Backend Error Message)
+    if (error.response) {
+      console.error("API Failure:", {
+        url: originalRequest?.url ? `${originalRequest.baseURL || ""}${originalRequest.url}` : originalRequest?.url,
+        status: error.response.status,
+        message: error.response.data?.message || error.message,
+      });
+    } else {
+      console.error("API Network Error:", {
+        url: originalRequest?.url ? `${originalRequest.baseURL || ""}${originalRequest.url}` : originalRequest?.url,
+        message: error.message,
+      });
+    }
+
     // If 401 and we haven't already retried this request
     if (error.response && error.response.status === 401 && !originalRequest._retry) {
       // Don't try to refresh if the failing request IS the refresh-token call
